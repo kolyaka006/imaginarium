@@ -8,6 +8,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   idUser : state.user.id,
+  userName : state.user.name,
+  userAvatar : state.user.avatar,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNews)

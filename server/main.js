@@ -50,7 +50,6 @@ if (project.env === 'development') {
   app.get('/api/login', (req, res) => {
     usersArray.forEach(user => {
       if (user.login === req.query.login && user.password === req.query.password) {
-        console.log('.....get user', user)
         return res.send(user)
       }
     })
@@ -58,16 +57,12 @@ if (project.env === 'development') {
     res.json(Object.assign({}, req.query, { name: req.query.login, id: userID, news: [] }))
   })
   app.get('/api/news', (req, res) => {
-    console.log('.....usersArray GET', usersArray, req.body.id)
     let news = []
     usersArray.forEach(user => {
-      console.log('.....user ', user)
-      console.log('.....user.id === req.query.id', user.id === +req.query.id, user.id, req.query.id)
       if (req.query.id === 'all' ? true : user.id === +req.query.id) {
         news = [...news, ...user.news]
       }
     })
-    console.log('.....news GET', news)
     res.status(200).json(news)
   })
   app.post('/api/news', (req, res) => {
@@ -76,30 +71,23 @@ if (project.env === 'development') {
       userID: req.body.id,
       id: ++newsID })
     usersArray = usersArray.map(user => {
-      console.log('.....user.id', user.id)
-      console.log('.....req.body.id', req.body.id)
-      console.log('.....user.id === req.body.id', user.id === +req.body.id)
       if (user.id === +req.body.id) {
         user.news = user.news || []
         user.news.push(news)
       }
       return user
     })
-    console.log('.....usersArray POST', usersArray)
     res.status(200).json({ news: news })
   })
 
   app.post('/api/upload/:userID', function (req, res) {
     let sampleFile = req.files.photo
-    console.log('.....sampleFile.name', sampleFile.name, sampleFile.name.split('.').pop())
     let avatarName = 'userID' + req.params.userID + '.' + sampleFile.name.split('.').pop()
     sampleFile.mv(__dirname + '/upload/' + avatarName, function (err) {
       if (err) {
         return res.status(500).send(err)
       }
-      console.log('.....req.params.userID', req.params.userID)
       usersArray = usersArray.map(user => {
-        console.log('.....test', user.id === +req.params.userID)
         if (user.id === +req.params.userID) {
           user.avatar = user.avatar || ''
           user.avatar = avatarName

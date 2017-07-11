@@ -8,11 +8,12 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
                   search, filter, filterDelete, changePage }) => {
   let searchInput, filterInput, count, numberOfPages
   count = 0
-  console.log('.....news1', news)
   if (filterArray) {
     filterArray.forEach(filter => {
       news = news.filter(item => {
-        return item.title.indexOf(filter.name) !== -1
+        let titleBool = item.title.indexOf(filter.name) !== -1
+        let tagsBool = item.tags.indexOf(filter.name) !== -1
+        return titleBool || tagsBool
       })
     })
   }
