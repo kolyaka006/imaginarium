@@ -1,5 +1,84 @@
-.duck {
-  display: block;
-  width: 120px;
-  margin: 1.5rem auto;
+.text-bold {
+  font-weight: bold;
 }
+
+.avatar {
+  height: 30px;
+  width: 30px;
+  border: 2px solid;
+  background-color: red;
+  text-align: right;
+  display: inline-block;
+  float: right;
+}
+
+.filter-block {
+  display: inline-block;
+  position: relative;
+  width: 50px;
+  height: 25px;
+  border: 1px solid #cccccc;
+  background-color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 15%;
+  margin-right: 12px;
+  margin-top: 10px;
+  text-align: left;
+  padding: 0 6px;
+  float: left;
+}
+
+.close-btn {
+  color: red;
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.filters {
+  min-height: 35px;
+}
+
+.news {
+  min-height: 765px;
+}
+
+.news-block {
+  margin-top: 15px;
+  min-height: 100px;
+  background-color: white;
+  padding: 10px 0;
+  border: 2px groove #e8e8e8;
+  box-sizing: content-box;
+}
+
+.pagination__page {
+  background-color: white;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px groove #e8e8e8;
+  cursor: pointer;
+  box-sizing: content-box;
+}
+
+.pagination__page_active {
+  font-weight: bold;
+  border-width: 3px;
+  color: #a50c0c;;
+}
+
+.pagination-block {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.pag-block {
+  display: inline-block;
+}
+
+

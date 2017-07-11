@@ -20,9 +20,12 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha",
     "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
+    "express-fileupload": "^0.1.4",
     "object-assign": "^4.1.1",
     "promise": "^7.1.1",
     "prop-types": "^15.5.10",
