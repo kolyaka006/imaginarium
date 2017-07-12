@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 let AddNews = ({ add, idUser, userName, userAvatar }) => {
-  let title, description, tagsArray
+  let title, description, tagsArray, poster
   return (
     <div className='row' style={{ marginTop: 15 }} >
       <div className='col-sm-12' >
@@ -35,14 +35,24 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
           tags = tagsArray.value.split(',')
           tags = tags.map((tag) => {
             let temp = clean(deleteSpace(tag))
-            console.log('.....temp', temp)
-            console.log('.....temp.join(', temp.join(' '))
             return temp.length > 0 ? temp.join(' ') : temp.join('')
           })
-          add({ title: title.value, description: description.value, tags: tags }, idUser)
+          console.log('.....userAvatar', userAvatar)
+          add({ title: title.value,
+            description: description.value,
+            tags: tags,
+            user: { id: idUser, name: userName },
+            userAvatar: userAvatar },
+            idUser, poster)
           title.value = ''
           description.value = ''
           tagsArray.value = ''
+          poster = ''
+          let preview = document.querySelector('#poster')
+          let reader = new FileReader()
+          reader.onloadend = () => {
+            preview.src = ''
+          }
         }} >
           <div className='col-sm-12' >
             <input className='form-control' placeholder='Title' ref={input => { title = input }} />
@@ -50,6 +60,36 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
               style={{ marginTop: 15 }} />
             <input className='form-control' placeholder='Tags' style={{ marginTop: 15 }}
               ref={input => { tagsArray = input }} />
+            <div className='row' >
+              <div className='col-sm-10 poster-avatar hide' >
+                <img id='poster' className='user-avatar_img' src='' />
+              </div>
+              <input id='upload-poster' type='file' className='btn btn-default col-sm-10 col-sm-offset-1 hide'
+                onChange={(e) => {
+                  e.preventDefault()
+                  let preview = document.querySelector('#poster')
+                  let file = document.querySelector('input[type=file]#upload-poster').files[0]
+                  let reader = new FileReader()
+                  reader.onloadend = () => {
+                    preview.src = reader.result
+                  }
+                  if (file) {
+                    var formData = new FormData()
+                    formData.append('photo', file)
+                    console.log('.....formData', file)
+                    poster = { data: formData, type: file.name.split('.').pop() }
+                    document.querySelector('.poster-avatar').classList.remove('hide')
+                    reader.readAsDataURL(file)
+                  }
+                }} />
+              <button className='btn btn-default col-sm-10 col-sm-offset-1'
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById('upload-poster').click()
+                }}
+                style={{ marginTop: 15 }} >Upload Poster
+              </button>
+            </div>
           </div>
           <button className='btn btn-default col-sm-10 col-sm-offset-1' style={{ marginTop: 10 }} >
             Add

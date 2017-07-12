@@ -7,9 +7,7 @@ const project = require('../project.config')
 const compress = require('compression')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const fileUpload = require('express-fileupload');
-const fs = require('fs');
-
+const fileUpload = require('express-fileupload')
 
 const app = express()
 app.use(compress())
@@ -70,6 +68,9 @@ if (project.env === 'development') {
       created_at: new Date().toISOString(),
       userID: req.body.id,
       id: ++newsID })
+    if (req.body.poster) {
+      news.poster = 'newsID' + news.id + '.' + req.body.poster
+    }
     usersArray = usersArray.map(user => {
       if (user.id === +req.body.id) {
         user.news = user.news || []
@@ -80,20 +81,24 @@ if (project.env === 'development') {
     res.status(200).json({ news: news })
   })
 
-  app.post('/api/upload/:userID', function (req, res) {
+  app.post('/api/upload/:userID/:type', function (req, res) {
     let sampleFile = req.files.photo
-    let avatarName = 'userID' + req.params.userID + '.' + sampleFile.name.split('.').pop()
+    console.log('.....req.params', req.params)
+    let avatarName = +req.params.type ? 'newsID' : 'userID'
+    avatarName += req.params.userID + '.' + sampleFile.name.split('.').pop()
     sampleFile.mv(__dirname + '/upload/' + avatarName, function (err) {
       if (err) {
         return res.status(500).send(err)
       }
-      usersArray = usersArray.map(user => {
-        if (user.id === +req.params.userID) {
-          user.avatar = user.avatar || ''
-          user.avatar = avatarName
-        }
-        return user
-      })
+      if (!+req.params.type) {
+        usersArray = usersArray.map(user => {
+          if (user.id === +req.params.userID) {
+            user.avatar = user.avatar || ''
+            user.avatar = avatarName
+          }
+          return user
+        })
+      }
       return res.send({ avatar: avatarName })
     })
   })

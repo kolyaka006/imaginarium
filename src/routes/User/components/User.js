@@ -10,7 +10,7 @@ class User extends React.Component {
     super(props)
     this.state = { edit: false }
   }
-  componentDidMount (getNews, idUser) {
+  componentDidMount () {
     this.props.getNews(this.props.idUser)
   }
 
@@ -28,7 +28,7 @@ class User extends React.Component {
     }
   }
 
-  render (login = this.props.login) {
+  render () {
     let loginText
     return (<div className='row' >
       <div className='col-sm-3' >
@@ -40,10 +40,10 @@ class User extends React.Component {
           </div>
         </div>
         <div className='row' >
-          <input id='file-upload' type='file' className='btn btn-default col-sm-10 col-sm-offset-1 hide'
+          <input id='upload-avatar' type='file' className='btn btn-default col-sm-10 col-sm-offset-1 hide'
             onChange={() => { this.previewFile() }} />
           <button className='btn btn-default col-sm-10 col-sm-offset-1'
-            onClick={() => { document.getElementById('file-upload').click() }} >Upload
+            onClick={() => { document.getElementById('upload-avatar').click() }} >Upload
           </button>
         </div>
         <div className='row' style={{ marginTop: 10 }} >

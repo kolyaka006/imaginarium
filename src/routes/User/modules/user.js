@@ -20,14 +20,14 @@ export const getNews = (id) => {
       load: true
     })
     fetch(`/api/news?id=${id}`)
-    .then(json => json.json())
-    .then(resp => {
-      dispatch({
-        type: GET_NEWS,
-        load: false,
-        news: resp
+      .then(json => json.json())
+      .then(resp => {
+        dispatch({
+          type: GET_NEWS,
+          load: false,
+          news: resp
+        })
       })
-    })
   }
 }
 export const changeAvatar = (id, file) => {
@@ -36,21 +36,21 @@ export const changeAvatar = (id, file) => {
       type: SEND_START,
       load: true
     })
-    fetch(`/api/upload/${id}`, {
+    fetch(`/api/upload/${id}/0`, {
       method: 'POST',
-      body: file })
-    .then(json => json.json())
-    .then(resp => {
-      dispatch({
-        type: CHANGE_AVATAR,
-        load: false,
-        avatar: resp.avatar
+      body: file
+    }).then(json => json.json())
+      .then(resp => {
+        dispatch({
+          type: CHANGE_AVATAR,
+          load: false,
+          avatar: resp.avatar
+        })
       })
-    })
   }
 }
 
-export const add = (news, id) => {
+export const add = (news, id, poster) => {
   return (dispatch, getState) => {
     dispatch({
       type: SEND_START,
@@ -62,15 +62,29 @@ export const add = (news, id) => {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: JSON.stringify({ news: news, id: id })
+      body: JSON.stringify({ news: news, id: id, poster: poster ? poster.type : false })
     }).then(json => json.json())
       .then(resp => {
-        console.log('.....resp', resp)
-        dispatch({
-          type: ADD_NEWS,
-          load: false,
-          news: resp.news
-        })
+        if (poster) {
+          fetch(`/api/upload/${resp.news.id}/1`, {
+            method: 'POST',
+            body: poster.data
+          })
+            .then(json => json.json())
+            .then(resp2 => {
+              dispatch({
+                type: ADD_NEWS,
+                load: false,
+                news: resp.news
+              })
+            })
+        } else {
+          dispatch({
+            type: ADD_NEWS,
+            load: false,
+            news: resp.news
+          })
+        }
       })
   }
 }
@@ -84,7 +98,7 @@ export const checkLogin = (login, password) => {
     fetch(`/api/login?login=${login}&password=${password}`)
       .then(json => json.json())
       .then(resp => {
-        console.log('.....resp ', resp )
+        console.log('.....resp ', resp)
         dispatch({
           type: CHECK_LOGIN,
           load: false,

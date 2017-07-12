@@ -17,7 +17,6 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
       })
     })
   }
-  console.log('.....news2', news)
   numberOfPages = Math.ceil(news.length / BLOCK_ON_PAGE)
   let pageRow = []
   if (numberOfPages > 1) {
@@ -29,7 +28,6 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
       }
     }
   }
-  console.log('.....idUser, news, load, filterArray, numberOfPages', idUser, news, load, filterArray, numberOfPages)
   return (
     <div className='row' style={{ marginTop: 15 }} >
       <div className='col-sm-6' >
@@ -71,7 +69,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
             count++
             return (
               <div className='col-sm-10 col-sm-offset-1' key={block.id} >
-                <BlockNews title={block.title} decription={block.description} created_at={block.created_at} />
+                <BlockNews news={block} />
               </div>
             )
           }
