@@ -31,50 +31,51 @@ class User extends React.Component {
   render () {
     let loginText
     return (<div className='row' >
-      <div className='col-sm-3' >
+      <div className='col-md-3 col-xs-12' >
         <div className='row' >
-          <div className='col-sm-10 col-sm-offset-1 user-avatar' >
+          <div className='col-md-10 col-md-offset-1 user-avatar' >
             <img className='user-avatar_img'
               src={this.props.avatar ? imageReq(`./${this.props.avatar}`) : DefProfile}
               alt='user-avatar' />
           </div>
         </div>
         <div className='row' >
-          <input id='upload-avatar' type='file' className='btn btn-default col-sm-10 col-sm-offset-1 hide'
+          <input id='upload-avatar' type='file' className='btn btn-default col-md-10 col-md-offset-1 hide'
             onChange={() => { this.previewFile() }} />
-          <button className='btn btn-default col-sm-10 col-sm-offset-1'
-            onClick={() => { document.getElementById('upload-avatar').click() }} >Upload
+          <button className='btn btn-default col-md-10 col-md-offset-1 col-xs-6 col-xs-offset-3'
+            onClick={() => { document.getElementById('upload-avatar').click() }} >
+            {(this.props.loadAvatar ? <div className='loader' /> : 'Upload avatar')}
           </button>
         </div>
         <div className='row' style={{ marginTop: 10 }} >
-          <div className='col-sm-10 col-sm-offset-1 text-left'>
-            <div className='col-sm-2' >Login:</div>
-            <div className='col-sm-10'>{this.props.login}</div>
+          <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
+            <div className='col-xs-2' >Login:</div>
+            <div className='col-xs-10'>{this.props.login}</div>
           </div>
-          { !this.props.edit ? <div className='col-sm-10 col-sm-offset-1 text-left'
+          { !this.props.edit ? <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'
             onDoubleClick={this.props.editStatus} >
-            <div className='col-sm-2' >Name:</div>
-            <div className='col-sm-10'>{this.props.name}</div>
+            <div className='col-xs-2' >Name:</div>
+            <div className='col-xs-10'>{this.props.name}</div>
           </div>
-            : <div className='col-sm-10 col-sm-offset-1 text-left'>
+            : <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
               <form onSubmit={(e) => {
                 e.preventDefault()
                 this.props.changeUserInfo({ name: loginText.value, edit: false })
               }}>
-                <div className='col-sm-2' >Name:</div>
-                <div className='col-sm-10'><input className='form-control' ref={(node) => { loginText = node }} /></div>
+                <div className='col-xs-2' >Name:</div>
+                <div className='col-xs-10'><input className='form-control' ref={(node) => { loginText = node }} /></div>
               </form>
             </div>
           }
         </div>
       </div>
-      <div className='col-sm-9' >
+      <div className='col-md-9 col-xs-12' >
         <div className='row' >
-          <div className='col-sm-8' >
-            <ListNews />
-          </div>
-          <div className='col-sm-4' >
+          <div className='col-md-4 col-md-push-8' >
             <AddNews />
+          </div>
+          <div className='col-md-8 col-md-pull-4' >
+            <ListNews />
           </div>
         </div>
       </div>
@@ -89,6 +90,7 @@ User.propTypes = {
   avatar: PropTypes.string,
   idUser: PropTypes.number,
   edit: PropTypes.bool,
+  loadAvatar: PropTypes.bool,
   getNews: PropTypes.func.isRequired,
   changeAvatar: PropTypes.func.isRequired,
   editStatus: PropTypes.func.isRequired,

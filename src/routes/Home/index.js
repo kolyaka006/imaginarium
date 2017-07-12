@@ -11,7 +11,6 @@ export default (store) => ({
        dependencies for bundling   */
       const Home = require('../Home/containers/HomeContainer').default
       const reducer = require('../../store/news').default
-
       /*  Add the reducer to the store on key 'counter'  */
       injectReducer(store, { key: 'news', reducer })
 

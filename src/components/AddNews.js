@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-let AddNews = ({ add, idUser, userName, userAvatar }) => {
+let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
   let title, description, tagsArray, poster
   return (
     <div className='row' style={{ marginTop: 15 }} >
@@ -80,7 +80,7 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
                     reader.readAsDataURL(file)
                   }
                 }} />
-              <button className='btn btn-default col-sm-10 col-sm-offset-1'
+              <button className='btn btn-default col-sm-10 col-sm-offset-1 col-xs-6 col-xs-offset-3'
                 onClick={(e) => {
                   e.preventDefault()
                   document.getElementById('upload-poster').click()
@@ -89,8 +89,9 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
               </button>
             </div>
           </div>
-          <button className='btn btn-default col-sm-10 col-sm-offset-1' style={{ marginTop: 10 }} >
-            Add
+          <button className='btn btn-default col-sm-10 col-sm-offset-1 col-xs-6 col-xs-offset-3'
+            style={{ marginTop: 10 }} >
+            {(loadNews ? <div className='loader' /> : 'Add')}
           </button>
         </form>
       </div>
@@ -102,7 +103,8 @@ AddNews.propTypes = {
   add: PropTypes.func.isRequired,
   idUser: PropTypes.number,
   userName: PropTypes.string,
-  userAvatar: PropTypes.string
+  userAvatar: PropTypes.string,
+  loadNews: PropTypes.bool
 }
 
 export default AddNews

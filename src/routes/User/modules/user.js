@@ -2,6 +2,8 @@
 // Constants
 // ------------------------------------
 export const SEND_START = 'SEND_START'
+export const SEND_START_NEWS = 'SEND_START_NEWS'
+export const SEND_START_AVATAR = 'SEND_START_AVATAR'
 export const GET_NEWS = 'GET_NEWS'
 export const ADD_NEWS = 'ADD_NEWS'
 export const CHANGE_AVATAR = 'CHANGE_AVATAR'
@@ -33,7 +35,7 @@ export const getNews = (id) => {
 export const changeAvatar = (id, file) => {
   return (dispatch, getState) => {
     dispatch({
-      type: SEND_START,
+      type: SEND_START_AVATAR,
       load: true
     })
     fetch(`/api/upload/${id}/0`, {
@@ -53,7 +55,7 @@ export const changeAvatar = (id, file) => {
 export const add = (news, id, poster) => {
   return (dispatch, getState) => {
     dispatch({
-      type: SEND_START,
+      type: SEND_START_NEWS,
       load: true
     })
     fetch('/api/news', {
@@ -98,7 +100,6 @@ export const checkLogin = (login, password) => {
     fetch(`/api/login?login=${login}&password=${password}`)
       .then(json => json.json())
       .then(resp => {
-        console.log('.....resp ', resp)
         dispatch({
           type: CHECK_LOGIN,
           load: false,
@@ -144,31 +145,28 @@ const ACTION_HANDLERS = {
   [SEND_START]: (state, action) => {
     return Object.assign({}, state, { load: action.load })
   },
+  [SEND_START_AVATAR]: (state, action) => {
+    return Object.assign({}, state, { loadAvatar: action.load })
+  },
   [GET_NEWS]: (state, action) => {
-    console.log('.....state user', state)
     return Object.assign({}, state, { news: action.news, load: action.load })
   },
   [STATUS_EDIT]: (state, action) => {
-    console.log('.....state user', state)
     return Object.assign({}, state, { edit: action.edit })
   },
   [SEND_REQUEST]: (state, action) => {
-    console.log('.....SEND_REQUEST', state, action)
     return Object.assign({}, state, { load: action.load })
   },
   [CHANGE_AVATAR]: (state, action) => {
-    console.log('.....SEND_REQUEST', state, action)
-    return Object.assign({}, state, { avatar: action.avatar, load: action.load })
+    return Object.assign({}, state, { avatar: action.avatar, loadAvatar: action.load })
   },
   [CHECK_LOGIN]: (state, action) => {
-    console.log('.....CHECK_LOGIN', state, action)
     return Object.assign({}, state, action.user, {
       isLogin: action.isLogin,
       load: action.load
     })
   },
   [EDIT_USER_INFO]: (state, action) => {
-    console.log('.....EDIT_USER_INFO', state, action)
     return Object.assign({}, state, action.info)
   }
 }
@@ -178,7 +176,6 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = { news: [], edit: false }
 export default function userReducer (state = initialState, action) {
-  console.log('.....reducer USER', state, action)
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

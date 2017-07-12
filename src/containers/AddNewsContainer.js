@@ -8,6 +8,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   idUser : state.user.id,
+  loadNews : state.news.loadNews,
   userName : state.user.name,
   userAvatar : state.user.avatar,
 })

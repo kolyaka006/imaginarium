@@ -33,7 +33,7 @@ class Profile extends React.Component {
             <ListNews />
           </div>
           <div className='col-sm-4' >
-            <button className='btn btn-default'><Link to='/'>Home</Link></button>
+            <Link to='/'><button className='btn btn-default'>Home</button></Link>
           </div>
         </div>
       </div>

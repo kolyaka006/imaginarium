@@ -4,6 +4,7 @@
 export const GET_NEWS = 'GET_NEWS'
 export const ADD_NEWS = 'ADD_NEWS'
 export const SEND_START = 'SEND_START'
+export const SEND_START_NEWS = 'SEND_START_NEWS'
 export const SEARCH_NEWS_END = 'SEARCH_NEWS_END'
 export const FILTER_NEWS_END = 'FILTER_NEWS_END'
 export const FILTER_NEWS_DELETE = 'FILTER_NEWS_DELETE'
@@ -23,7 +24,6 @@ export const getNews = (id) => {
     })
     fetch(`/api/news?id=${id}`).then(json => json.json())
       .then(resp => {
-        console.log('.....resp get', resp)
         dispatch({
           type: GET_NEWS,
           load: false,
@@ -99,19 +99,20 @@ const ACTION_HANDLERS = {
   [SEND_START]: (state, action) => {
     return Object.assign({}, state, { load: action.load })
   },
+  [SEND_START_NEWS]: (state, action) => {
+    return Object.assign({}, state, { loadNews: action.load })
+  },
   [GET_NEWS]: (state, action) => {
-    console.log('.....GET_NEWS', state, action)
     return Object.assign({}, state, {
       news: action.news,
       load: action.load
     })
   },
   [ADD_NEWS]: (state, action) => {
-    console.log('.....ADD_NEWS', state, action)
     let news = state.news ? state.news : []
     return Object.assign({}, state, {
       news: [...news, { ...action.news }]
-    }, { load: action.load })
+    }, { loadNews: action.load })
   },
   [SEARCH_NEWS_END]: (state, action) => {
     return Object.assign({}, state, {
@@ -120,10 +121,6 @@ const ACTION_HANDLERS = {
     })
   },
   [FILTER_NEWS_END]: (state, action) => {
-    console.log('.....FILTER_NEWS_END', state, action)
-    console.log('.....teswt new filter', [...state.filterArray, ...action.filter.map(item => {
-      return { name: item, id: filterID++ }
-    })])
     return Object.assign({}, state, {
       load: action.load,
       filterArray: [...state.filterArray, ...action.filter.map(item => {
@@ -138,7 +135,6 @@ const ACTION_HANDLERS = {
     })
   },
   [CHANGE_PAGE]: (state, action) => {
-    console.log('.....CHANGE_PAGE', state, action)
     return Object.assign({}, state, {
       curPage: action.page
     })
@@ -150,7 +146,6 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = { news: [], filterArray: [], curPage: 0 }
 export default function newsReducer (state = initialState, action) {
-  console.log('.....Reducer  News', state, action)
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

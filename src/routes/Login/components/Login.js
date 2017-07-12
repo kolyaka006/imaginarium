@@ -27,7 +27,8 @@ let Login = ({ checkLogin, load, isLogin }) => {
           <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 15 }}>
             <input className='form-control' placeholder='Password' ref={node => { password = node }} />
           </div>
-          <button className='btn btn-default btn-login col-sm-2 col-sm-offset-5' disabled={load}>
+          <button className={'btn btn-default btn-login col-sm-2 col-sm-offset-5 ' +
+          'col-xs-6 col-xs-offset-3'} disabled={load}>
             {(load ? <div className='loader' /> : 'Login')}
           </button>
         </form>

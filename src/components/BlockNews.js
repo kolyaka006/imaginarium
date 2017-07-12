@@ -7,7 +7,7 @@ class BlockNews extends React.Component {
   render () {
     return (
       <div className='row news-block' >
-        <div className='col-sm-12 text-left text-bold' style={{ fontSize: 24 }} >
+        <div className='col-xs-12 text-left text-bold' style={{ fontSize: 24 }} >
           <div className='user-avatar_news' >
             <img className='user-avatar_img' src={this.props.news.userAvatar
               ? imageReq(`./${this.props.news.userAvatar}`) : ''} />
@@ -23,16 +23,16 @@ class BlockNews extends React.Component {
             }
           </div>
         </div>
-        <div className='col-sm-12 text-left' style={{ fontSize: 16, marginTop: 10, marginBottom: 10 }} >
+        <div className='col-xs-12 text-left' style={{ fontSize: 16, marginTop: 10, marginBottom: 10 }} >
           {this.props.news.description}
         </div>
-        <div className={`col-sm-offset-2 col-sm-8 ${this.props.news.poster ? '' : 'hide'}`} >
+        <div className={`col-xs-offset-2 col-xs-8 ${this.props.news.poster ? '' : 'hide'}`} >
           <div className='avatar' >
             <img className='user-avatar_img' src={this.props.news.poster
               ? imageReq(`./${this.props.news.poster}`) : ''} />
           </div>
         </div>
-        <div className='col-sm-12' style={{ fontSize: 12 }} >
+        <div className='col-xs-12' style={{ fontSize: 12 }} >
           <div className='ib news-block__footer text-left text-bold' >
             <Link to={`/profile/${this.props.news.user.id}`}>
               {this.props.news.user.name}

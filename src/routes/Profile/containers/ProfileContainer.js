@@ -6,10 +6,8 @@ const mapDispatchToProps = {
   getNews
 }
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.profile.user,
-  }
-}
+const mapStateToProps = (state) => ({
+  user: state.profile.user
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

@@ -8,7 +8,7 @@ class HomeView extends React.Component {
   componentDidMount () {
     this.props.getNews('all')
   }
-  render (isLogin = this && this.props ? this.props.isLogin : false) {
+  render (isLogin = this &&   this.props ? this.props.isLogin : false) {
     return (
       <div>
         { isLogin ? '' : browserHistory.push('/login')}

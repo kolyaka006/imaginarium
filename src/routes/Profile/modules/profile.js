@@ -43,7 +43,6 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { load: action.load })
   },
   [GET_NEWS]: (state, action) => {
-    console.log('.....state user', state)
     return Object.assign({}, state, action, { load: action.load })
   }
 }
@@ -53,7 +52,6 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = { news: [], user: {} }
 export default function userReducer (state = initialState, action) {
-  console.log('.....reducer PROFILE', state, action)
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

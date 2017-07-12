@@ -6,12 +6,9 @@ const mapDispatchToProps = {
   getNews
 }
 
-const mapStateToProps = (state) => {
-  console.log('.....HOEM mapStateToProps', state)
-  return {
-    isLogin: state.user.isLogin,
-    name: state.user.name
-  }
-}
+const mapStateToProps = (state) => ({
+  isLogin: state.user.isLogin,
+  name: state.user.name
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

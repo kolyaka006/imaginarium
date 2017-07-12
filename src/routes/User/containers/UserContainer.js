@@ -9,14 +9,13 @@ const mapDispatchToProps = {
   changeUserInfo
 }
 
-const mapStateToProps = (state) => {
-  return {
-    idUser: state.user.id,
-    login: state.user.login,
-    name: state.user.name,
-    avatar: state.user.avatar,
-    edit: state.user.edit
-  }
-}
+const mapStateToProps = (state) => ({
+  idUser: state.user.id,
+  login: state.user.login,
+  name: state.user.name,
+  avatar: state.user.avatar,
+  edit: state.user.edit,
+  loadAvatar: state.user.loadAvatar
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(User)
