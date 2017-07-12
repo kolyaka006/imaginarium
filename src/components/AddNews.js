@@ -37,7 +37,6 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
             let temp = clean(deleteSpace(tag))
             return temp.length > 0 ? temp.join(' ') : temp.join('')
           })
-          console.log('.....userAvatar', userAvatar)
           add({ title: title.value,
             description: description.value,
             tags: tags,
@@ -76,7 +75,6 @@ let AddNews = ({ add, idUser, userName, userAvatar }) => {
                   if (file) {
                     var formData = new FormData()
                     formData.append('photo', file)
-                    console.log('.....formData', file)
                     poster = { data: formData, type: file.name.split('.').pop() }
                     document.querySelector('.poster-avatar').classList.remove('hide')
                     reader.readAsDataURL(file)

@@ -54,6 +54,13 @@ if (project.env === 'development') {
     usersArray.push(Object.assign({}, req.query, { name: req.query.login, id: ++userID, news: [] }))
     res.json(Object.assign({}, req.query, { name: req.query.login, id: userID, news: [] }))
   })
+  app.get('/api/userInfo', (req, res) => {
+    usersArray.forEach(user => {
+      if (user.id === +req.query.id) {
+        return res.json({ avatar: user.avatar, name: user.name })
+      }
+    })
+  })
   app.get('/api/news', (req, res) => {
     let news = []
     usersArray.forEach(user => {
