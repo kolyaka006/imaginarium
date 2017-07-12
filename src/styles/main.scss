@@ -124,6 +124,7 @@ body {
   vertical-align: middle;
   margin-right: 10px;
   margin-top: 5px;
+  border: 1px solid;
 }
 
 .news-block__title {
@@ -138,6 +139,8 @@ body {
   display: inline-block;
   text-align: right;
   width: calc(40% - 60px);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .news-block__tags_tag {
@@ -145,7 +148,7 @@ body {
   max-width: 50px;
   font-size: 13px;
   color: #c8c8c8;
-  top: -15px;
+  top: -7px;
   position: relative;
   margin-right: 5px;
   overflow: hidden;

@@ -70,6 +70,14 @@ if (project.env === 'development') {
     })
     res.status(200).json(news)
   })
+  app.fetch('/api/user/:id', (req, res) => {
+    usersArray = usersArray.map(user => {
+      if (user.id === +req.query.id) {
+        user.name = req.body.name
+      }
+    })
+    res.statusCode(200)
+  })
   app.post('/api/news', (req, res) => {
     let news = Object.assign({}, req.body.news, {
       created_at: new Date().toISOString(),

@@ -110,12 +110,23 @@ export const checkLogin = (login, password) => {
   }
 }
 
-export const changeUserInfo = (info) => {
+export const changeUserInfo = (info, id) => {
   return (dispatch, getState) => {
     dispatch({
-      type: EDIT_USER_INFO,
-      info: info
+      type: SEND_START,
+      load: true
     })
+    fetch(`/api/user/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(info)
+    }).then(json => json.json())
+      .then(resp => {
+        dispatch({
+          type: CHANGE_AVATAR,
+          load: false,
+          info: resp.info
+        })
+      })
   }
 }
 
