@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router'
 import AddNews from '../../../containers/AddNewsContainer'
 import ListNews from '../../../containers/ListNewsContainer'
 import DefProfile from '../../../../public/profile_users.jpg'
@@ -32,6 +33,7 @@ class User extends React.Component {
     let loginText
     return (<div className='row' >
       <div className='col-md-3 col-xs-12' >
+        <Link to='/'><button className='btn btn-default' style={{ marginBottom: 10 }}>Home</button></Link>
         <div className='row' >
           <div className='col-md-10 col-md-offset-1 user-avatar' >
             <img className='user-avatar_img'
@@ -60,7 +62,7 @@ class User extends React.Component {
             : <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
               <form onSubmit={(e) => {
                 e.preventDefault()
-                this.props.changeUserInfo({ name: loginText.value, edit: false })
+                this.props.changeUserInfo({ name: loginText.value, edit: false }, this.props.idUser)
               }}>
                 <div className='col-xs-2' >Name:</div>
                 <div className='col-xs-10'><input className='form-control' ref={(node) => { loginText = node }} /></div>

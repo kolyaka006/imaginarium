@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 import { getNews } from '../../../store/news'
+import { logout } from '../../User/modules/user'
 import Home from '../components/HomeView'
 
 const mapDispatchToProps = {
-  getNews
+  getNews,
+  logout
 }
 
 const mapStateToProps = (state) => ({

@@ -46,13 +46,15 @@ if (project.env === 'development') {
   let userID = 0
   let newsID = 0
   app.get('/api/login', (req, res) => {
+    console.log('.....req.query', req.query)
+    console.log('.....usersArray', usersArray)
     usersArray.forEach(user => {
       if (user.login === req.query.login && user.password === req.query.password) {
         return res.send(user)
       }
     })
     usersArray.push(Object.assign({}, req.query, { name: req.query.login, id: ++userID, news: [] }))
-    res.json(Object.assign({}, req.query, { name: req.query.login, id: userID, news: [] }))
+    return res.json(Object.assign({}, req.query, { name: req.query.login, id: userID, news: [] }))
   })
   app.get('/api/userInfo', (req, res) => {
     usersArray.forEach(user => {
@@ -68,15 +70,16 @@ if (project.env === 'development') {
         news = [...news, ...user.news]
       }
     })
-    res.status(200).json(news)
+    return res.status(200).json(news)
   })
-  app.fetch('/api/user/:id', (req, res) => {
+  app.patch('/api/user/:id', (req, res) => {
     usersArray = usersArray.map(user => {
-      if (user.id === +req.query.id) {
-        user.name = req.body.name
+      if (user.id === +req.params.id) {
+        user.name = req.body.info.name
       }
+      return user
     })
-    res.statusCode(200)
+    return res.json({ info: { name: req.body.info.name } })
   })
   app.post('/api/news', (req, res) => {
     let news = Object.assign({}, req.body.news, {
@@ -93,7 +96,7 @@ if (project.env === 'development') {
       }
       return user
     })
-    res.status(200).json({ news: news })
+    return res.status(200).json({ news: news })
   })
 
   app.post('/api/upload/:userID/:type', function (req, res) {

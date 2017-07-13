@@ -1,19 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router'
 import PropTypes from 'prop-types'
 import './PageLayout.scss'
 
 export const PageLayout = ({ children }) => (
   <div className='text-center' >
     <h1>React Redux News</h1>
-    <Link to='/'>home</Link>
-    {' '}
-    <Link to='/login'>login</Link>
     {children}
   </div>
 )
 PageLayout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 }
 
 export default PageLayout

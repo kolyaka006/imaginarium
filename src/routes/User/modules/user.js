@@ -11,6 +11,7 @@ export const EDIT_USER_INFO = 'EDIT_USER_INFO'
 export const STATUS_EDIT = 'STATUS_EDIT'
 export const SEND_REQUEST = 'SEND_REQUEST'
 export const CHECK_LOGIN = 'CHECK_LOGIN'
+export const LOGOUT = 'LOGOUT'
 
 // ------------------------------------
 // Actions
@@ -117,13 +118,18 @@ export const changeUserInfo = (info, id) => {
       load: true
     })
     fetch(`/api/user/${id}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       method: 'PATCH',
-      body: JSON.stringify(info)
+      body: JSON.stringify({ info: info })
     }).then(json => json.json())
       .then(resp => {
         dispatch({
-          type: CHANGE_AVATAR,
+          type: EDIT_USER_INFO,
           load: false,
+          edit: false,
           info: resp.info
         })
       })
@@ -139,13 +145,23 @@ export const editStatus = () => {
   }
 }
 
+export const logout = () => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: LOGOUT,
+      isLogin: false
+    })
+  }
+}
+
 export const actions = {
   getNews,
   add,
   checkLogin,
   changeAvatar,
   editStatus,
-  changeUserInfo
+  changeUserInfo,
+  logout
 }
 
 // ------------------------------------
@@ -178,7 +194,11 @@ const ACTION_HANDLERS = {
     })
   },
   [EDIT_USER_INFO]: (state, action) => {
-    return Object.assign({}, state, action.info)
+    return Object.assign({}, state, action.info, { edit: action.edit })
+  },
+  [LOGOUT]: (state, action) => {
+    console.log('.....testLOGOUT', state, action)
+    return Object.assign({}, state, { isLogin: action.isLogin })
   }
 }
 
