@@ -2,7 +2,7 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import PropTypes from 'prop-types'
 
-let Login = ({ checkLogin, load, isLogin }) => {
+let Login = ({ checkLogin, load = false, isLogin }) => {
   let login, password
   if (isLogin) {
     browserHistory.push('/')
@@ -51,6 +51,7 @@ let Login = ({ checkLogin, load, isLogin }) => {
     </div>
   )
 }
+
 Login.propTypes = {
   checkLogin: PropTypes.func.isRequired,
   load: PropTypes.bool,

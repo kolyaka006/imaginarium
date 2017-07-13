@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 import AddNews from '../../../containers/AddNewsContainer'
 import ListNews from '../../../containers/ListNewsContainer'
 import DefProfile from '../../../../public/profile_users.jpg'
-const imageReq = require.context('../../../../server/upload', false, /\.png|\.jpeg|\.jpg$/)
+const imageReq = require.context('../../../../server/upload/', false, /\.png|\.jpeg|\.jpg$/)
 
 class User extends React.Component {
   constructor (props) {
@@ -36,9 +36,11 @@ class User extends React.Component {
         <Link to='/'><button className='btn btn-default' style={{ marginBottom: 10 }}>Home</button></Link>
         <div className='row' >
           <div className='col-md-10 col-md-offset-1 user-avatar' >
-            <img className='user-avatar_img'
-              src={this.props.avatar ? imageReq(`./${this.props.avatar}`) : DefProfile}
-              alt='user-avatar' />
+            {console.log('.....this.props.avatar', this.props.avatar, !!this.props.avatar)}
+            {this.props.avatar
+              ? <img className='user-avatar_img' src={imageReq(`./${this.props.avatar}`)} alt='user-avatar' />
+              : <img className='user-avatar_img' src={DefProfile} alt='user-avatar' />
+            }
           </div>
         </div>
         <div className='row' >

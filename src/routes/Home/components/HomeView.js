@@ -11,14 +11,14 @@ class HomeView extends React.Component {
   render (isLogin = this &&   this.props ? this.props.isLogin : false) {
     return (
       <div>
-        { isLogin ? '' : browserHistory.push('/login')}
+        { this.props.isLogin ? '' : browserHistory.push('/login') }
         <h4>Welcome, <Link to='/user' >{this.props.name}</Link>!
           <div className='logout' onClick={this.props.logout}>
             <i className='glyphicon glyphicon-off' style={{ verticalAlign: 'text-top' }}></i> logout</div>
         </h4>
         <div className='row' >
           <div className='col-sm-10 col-sm-offset-1' >
-            <ListNews />
+            {this.props.isLogin ? <ListNews /> : ''}
           </div>
         </div>
       </div>

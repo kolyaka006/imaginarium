@@ -9,8 +9,8 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-  isLogin: state.user.isLogin,
-  name: state.user.name
+  isLogin: state.user ? state.user.isLogin : false,
+  name: state.user ? state.user.name : ''
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

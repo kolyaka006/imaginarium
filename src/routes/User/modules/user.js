@@ -198,7 +198,7 @@ const ACTION_HANDLERS = {
   },
   [LOGOUT]: (state, action) => {
     console.log('.....testLOGOUT', state, action)
-    return Object.assign({}, state, { isLogin: action.isLogin })
+    return Object.assign({}, { isLogin: action.isLogin })
   }
 }
 
