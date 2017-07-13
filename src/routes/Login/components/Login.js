@@ -13,7 +13,22 @@ let Login = ({ checkLogin, load, isLogin }) => {
       <div className='col-sm-6 col-sm-offset-3'>
         <form className='row' onSubmit={(e) => {
           e.preventDefault()
-          if (!login.value.trim() || !password.value.trim()) {
+          let value = {
+            login: !login.value.trim() || !!login.value.match(/\W+/),
+            password: !password.value.trim(),
+          }
+          let queryInput = {
+            login: document.querySelector('.inputLogin'),
+            password: document.querySelector('.inputPassword'),
+          }
+          for (let item in queryInput) {
+            queryInput[item].classList.remove('error-input')
+          }
+          console.log('.....value', value)
+          if (value.login || value.password) {
+            for (let item in queryInput) {
+              value[item] ? queryInput[item].classList.add('error-input') : false
+            }
             return
           }
           checkLogin(login.value, password.value)
@@ -22,10 +37,10 @@ let Login = ({ checkLogin, load, isLogin }) => {
         }
       } >
           <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 30 }}>
-            <input className='form-control' placeholder='Login' ref={node => { login = node }} />
+            <input className='form-control inputLogin' placeholder='Login' ref={node => { login = node }} />
           </div>
           <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 15 }}>
-            <input className='form-control' placeholder='Password' ref={node => { password = node }} />
+            <input className='form-control inputPassword' placeholder='Password' ref={node => { password = node }} />
           </div>
           <button className={'btn btn-default btn-login col-sm-2 col-sm-offset-5 ' +
           'col-xs-6 col-xs-offset-3'} disabled={load}>

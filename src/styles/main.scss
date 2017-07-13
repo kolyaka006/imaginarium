@@ -161,6 +161,10 @@ body {
   box-sizing: border-box;
 }
 
+.error-input {
+  border: 1px solid red
+}
+
 .btn-default {
   outline: none !important;
 }

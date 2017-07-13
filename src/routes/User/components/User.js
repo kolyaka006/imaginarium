@@ -54,10 +54,10 @@ class User extends React.Component {
             <div className='col-xs-2' >Login:</div>
             <div className='col-xs-10'>{this.props.login}</div>
           </div>
-          { !this.props.edit ? <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'
-            onDoubleClick={this.props.editStatus} >
+          { !this.props.edit ? <div className='col-md-10 col-md-offset-1 col-xs-12 text-left' >
             <div className='col-xs-2' >Name:</div>
-            <div className='col-xs-10'>{this.props.name}</div>
+            <div className='col-xs-10'>{this.props.name}
+              <i className='glyphicon glyphicon-pencil' onClick={this.props.editStatus}></i></div>
           </div>
             : <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
               <form onSubmit={(e) => {

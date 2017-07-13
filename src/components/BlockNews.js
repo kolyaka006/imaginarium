@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import DefProfile from '../../public/profile_users.jpg'
 const imageReq = require.context('../../server/upload', false, /\.png|\.jpeg|\.jpg$/)
 
 class BlockNews extends React.Component {
@@ -10,7 +11,7 @@ class BlockNews extends React.Component {
         <div className='col-xs-12 text-left text-bold' style={{ fontSize: 24 }} >
           <div className='user-avatar_news' >
             <img className='user-avatar_img' src={this.props.news.userAvatar
-              ? imageReq(`./${this.props.news.userAvatar}`) : ''} />
+              ? imageReq(`./${this.props.news.userAvatar}`) : DefProfile} />
           </div>
           <div className='news-block__title' >
             {this.props.news.title}

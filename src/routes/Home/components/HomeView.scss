@@ -12,14 +12,13 @@
 .filter-block {
   display: inline-block;
   position: relative;
-  width: 50px;
+  min-width: 30px;
   height: 25px;
   border: 1px solid #cccccc;
   background-color: white;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-radius: 15%;
   margin-right: 12px;
   margin-top: 10px;
   text-align: left;
@@ -29,11 +28,12 @@
 
 .close-btn {
   color: red;
-  position: absolute;
-  right: 6px;
-  top: 4px;
+  position: relative;
   font-size: 10px;
   cursor: pointer;
+  width: 10px;
+  margin-left: 5px;
+  display: inline-block;
 }
 
 .filters {
@@ -79,7 +79,9 @@
 }
 
 .logout {
-
+  float: right;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 

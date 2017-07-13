@@ -8,10 +8,25 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
       <div className='col-sm-12' >
         <form className='row' onSubmit={(e) => {
           e.preventDefault()
-          if (!title.value.trim() || !description.value.trim()) {
+          let value = {
+            input: !title.value.trim(),
+            description: !description.value.trim(),
+            tags: !tagsArray.value.trim()
+          }
+          let queryInput = {
+            input: document.querySelector('.inputTitle'),
+            description: document.querySelector('.inputDescription'),
+            tags: document.querySelector('.inputTags')
+          }
+          for (let item in queryInput) {
+            queryInput[item].classList.remove('error-input')
+          }
+          if (value.input || value.description || value.tags) {
+            for (let item in queryInput) {
+              value[item] ? queryInput[item].classList.add('error-input') : false
+            }
             return
           }
-
           let clean = (arr) => {
             for (var i = 0; i < arr.length; i++) {
               if (arr[i] === undefined) {
@@ -54,10 +69,11 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
           }
         }} >
           <div className='col-sm-12' >
-            <input className='form-control' placeholder='Title' ref={input => { title = input }} />
-            <textarea className='form-control' placeholder='Description' ref={textarea => { description = textarea }}
+            <input className='inputTitle form-control' placeholder='Title*' ref={input => { title = input }} />
+            <textarea className='form-control inputDescription' placeholder='Description*'
+              ref={textarea => { description = textarea }}
               style={{ marginTop: 15 }} />
-            <input className='form-control' placeholder='Tags' style={{ marginTop: 15 }}
+            <input className='form-control inputTags' placeholder='Tags*' style={{ marginTop: 15 }}
               ref={input => { tagsArray = input }} />
             <div className='row' >
               <div className='col-sm-10 poster-avatar hide' >
