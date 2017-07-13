@@ -5,20 +5,40 @@ import BlockNews from './BlockNews'
 const BLOCK_ON_PAGE = 5
 
 let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, searchText = '',
-                  search, filter, filterDelete, changePage }) => {
+                  search, filter, filterDelete, changePage, checked, changeChecked }) => {
   let searchInput, filterInput, count, numberOfPages
   count = 0
-  if (filterArray) {
+  let filterNews = () => {
     filterArray.forEach(filter => {
-      news = news.filter(item => {
-        let titleBool = item.title.indexOf(filter.name) !== -1
-        let tagsBool = item.tags.indexOf(filter.name) !== -1
-        let userBool = item.user.name.indexOf(filter.name) !== -1
-        return titleBool || tagsBool || userBool
-      })
+      if (checked.title) {
+        news = news.filter(item => {
+          return item.title.indexOf(filter.name) !== -1
+        })
+      }
+      if (checked.tag) {
+        news = news.filter(item => {
+          return item.tags.indexOf(filter.name) !== -1
+        })
+      }
+      if (checked.user) {
+        news = news.filter(item => {
+          return item.user.name.indexOf(filter.name) !== -1
+        })
+      }
     })
   }
+  if (filterArray.length) {
+    filterNews()
+  }
+  this.state = { changeCheck : () => {
+    changeChecked({
+      title: document.querySelector('.title-check').checked,
+      tag: document.querySelector('.tag-check').checked,
+      user: document.querySelector('.user-check').checked
+    })
+  } }
   numberOfPages = Math.ceil(news.length / BLOCK_ON_PAGE)
+  curPage >= numberOfPages ? changePage(numberOfPages - 1) : false
   let pageRow = []
   if (numberOfPages > 1) {
     for (let i = 0; i < numberOfPages; i++) {
@@ -31,7 +51,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
   }
   return (
     <div className='row' style={{ marginTop: 15 }} >
-      <div className='col-xs-6' >
+      <div className='col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1' style={{ marginBottom: 10 }}>
         <form onSubmit={(e) => {
           e.preventDefault()
           search(searchInput.value)
@@ -41,12 +61,12 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
             ref={node => { searchInput = node }} />
           <div className={`filters ${searchText ? '' : 'hide'}`} >
             <div className='filter-block' >
-                {searchText}
+              {searchText}
             </div>
           </div>
         </form>
       </div>
-      <div className='col-xs-6' >
+      <div className='col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1' >
         <form onSubmit={(e) => {
           e.preventDefault()
           filter(filterInput.value.replace(/\s/g, '').split(','))
@@ -55,6 +75,16 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
           <input type='text' className='form-control'
             placeholder='Filter for title, tags, users (Enter filters separated by commas)'
             ref={node => { filterInput = node }} />
+          <div className='text-left row'>
+            <div className='col-xs-10' style={{ marginTop: 10 }}>
+              <input type='checkbox' className='title-check checkbox form-control' onClick={this.state.changeCheck} />
+              <label>Title </label>
+              <input type='checkbox' className='tag-check checkbox form-control' onClick={this.state.changeCheck} />
+              <label>Tags </label>
+              <input type='checkbox' className='user-check checkbox form-control' onClick={this.state.changeCheck} />
+              <label>Users </label>
+            </div>
+          </div>
           <div className='filters' >
             {filterArray.map(filter => {
               return (
@@ -114,10 +144,12 @@ ListNews.propTypes = {
   filterArray: PropTypes.array,
   searchText: PropTypes.string,
   curPage: PropTypes.number,
+  checked: PropTypes.object,
   search: PropTypes.func.isRequired,
   filter: PropTypes.func.isRequired,
   filterDelete: PropTypes.func.isRequired,
   changePage: PropTypes.func.isRequired,
+  changeChecked: PropTypes.func.isRequired
 }
 
 export default ListNews

@@ -161,6 +161,19 @@ body {
   box-sizing: border-box;
 }
 
+.checkbox {
+  margin: 0 !important;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 5px !important;
+}
+
+label {
+  margin-right: 5px;
+}
+
 .error-input {
   border: 1px solid red
 }

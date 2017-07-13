@@ -57,7 +57,8 @@ class User extends React.Component {
           { !this.props.edit ? <div className='col-md-10 col-md-offset-1 col-xs-12 text-left' >
             <div className='col-xs-2' >Name:</div>
             <div className='col-xs-10'>{this.props.name}
-              <i className='glyphicon glyphicon-pencil' onClick={this.props.editStatus}></i></div>
+              <i className='glyphicon glyphicon-pencil' onClick={this.props.editStatus}
+                style={{ marginLeft: 10 }}></i></div>
           </div>
             : <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
               <form onSubmit={(e) => {

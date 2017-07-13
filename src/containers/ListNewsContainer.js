@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { search, filter, filterDelete, changePage } from '../store/news'
+import { search, filter, filterDelete, changePage, changeChecked } from '../store/news'
 import ListNews from '../components/ListNews'
 
 const mapDispatchToProps = {
@@ -7,6 +7,7 @@ const mapDispatchToProps = {
   filter,
   filterDelete,
   changePage,
+  changeChecked
 }
 
 const mapStateToProps = (state) => {
@@ -16,6 +17,7 @@ const mapStateToProps = (state) => {
     idUser: state.user.id,
     curPage: state.news.curPage,
     filterArray: state.news.filterArray,
+    checked: state.news.checked,
     searchText: state.news.search
   }
 }

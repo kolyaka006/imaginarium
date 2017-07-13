@@ -9,7 +9,7 @@ export const SEARCH_NEWS_END = 'SEARCH_NEWS_END'
 export const FILTER_NEWS_END = 'FILTER_NEWS_END'
 export const FILTER_NEWS_DELETE = 'FILTER_NEWS_DELETE'
 export const CHANGE_PAGE = 'CHANGE_PAGE'
-export const LOCATION_CHANGE = 'LOCATION_CHANGE'
+export const CHANGE_CHECKED = 'CHANGE_CHECKED'
 
 let filterID = 0
 
@@ -85,11 +85,19 @@ export const changePage = (page) => {
   }
 }
 
+export const changeChecked = (checked) => {
+  return {
+    type: CHANGE_CHECKED,
+    checked: checked
+  }
+}
+
 export const actions = {
   search,
   filter,
   filterDelete,
-  changePage
+  changePage,
+  changeChecked
 }
 
 // ------------------------------------
@@ -138,13 +146,18 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, {
       curPage: action.page
     })
+  },
+  [CHANGE_CHECKED]: (state, action) => {
+    return Object.assign({}, state, {
+      checked: action.checked
+    })
   }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = { news: [], filterArray: [], curPage: 0 }
+const initialState = { news: [], filterArray: [], curPage: 0 , checked: {} }
 export default function newsReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
