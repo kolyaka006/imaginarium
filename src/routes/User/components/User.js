@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import AddNews from '../../../containers/AddNewsContainer'
 import ListNews from '../../../containers/ListNewsContainer'
-import DefProfile from '../../../../public/profile_users.jpg'
-const imageReq = require.context('../../../../server/upload/', false, /\.png|\.jpeg|\.jpg$/)
 
 class User extends React.Component {
   constructor (props) {
@@ -26,6 +24,7 @@ class User extends React.Component {
       var formData = new FormData()
       formData.append('photo', file)
       this.props.changeAvatar(this.props.idUser, formData)
+      this.props.getNews(this.props.idUser)
     }
   }
 
@@ -36,10 +35,9 @@ class User extends React.Component {
         <Link to='/'><button className='btn btn-default' style={{ marginBottom: 10 }}>Home</button></Link>
         <div className='row' >
           <div className='col-md-10 col-md-offset-1 user-avatar' >
-            {console.log('.....this.props.avatar', this.props.avatar, !!this.props.avatar)}
             {this.props.avatar
-              ? <img className='user-avatar_img' src={imageReq(`./${this.props.avatar}`)} alt='user-avatar' />
-              : <img className='user-avatar_img' src={DefProfile} alt='user-avatar' />
+              ? <img className='user-avatar_img' src={this.props.avatar + '?' + Date.now()} alt='user-avatar' />
+              : <img className='user-avatar_img' src={'profile_users.jpg'} alt='user-avatar' />
             }
           </div>
         </div>
@@ -60,12 +58,13 @@ class User extends React.Component {
             <div className='col-xs-2' >Name:</div>
             <div className='col-xs-10'>{this.props.name}
               <i className='glyphicon glyphicon-pencil' onClick={this.props.editStatus}
-                style={{ marginLeft: 10 }}></i></div>
+                style={{ marginLeft: 10 }}> </i></div>
           </div>
             : <div className='col-md-10 col-md-offset-1 col-xs-12 text-left'>
               <form onSubmit={(e) => {
                 e.preventDefault()
                 this.props.changeUserInfo({ name: loginText.value, edit: false }, this.props.idUser)
+                this.props.getNews(this.props.idUser)
               }}>
                 <div className='col-xs-2' >Name:</div>
                 <div className='col-xs-10'><input className='form-control' ref={(node) => { loginText = node }} /></div>
@@ -93,7 +92,7 @@ User.propTypes = {
   login: PropTypes.string,
   name: PropTypes.string,
   avatar: PropTypes.string,
-  idUser: PropTypes.number,
+  idUser: PropTypes.string,
   edit: PropTypes.bool,
   loadAvatar: PropTypes.bool,
   getNews: PropTypes.func.isRequired,

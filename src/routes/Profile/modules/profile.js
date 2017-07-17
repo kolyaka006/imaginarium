@@ -13,19 +13,15 @@ export const getNews = (id) => {
       type: SEND_START,
       load: true
     })
-    fetch(`/api/news?id=${id}`)
+    fetch(`/api/userInfo?id=${id}`)
       .then(json => json.json())
-      .then(news => {
-        fetch(`/api/userInfo?id=${id}`)
-          .then(json => json.json())
-          .then(user => {
-            dispatch({
-              type: GET_NEWS,
-              load: false,
-              news: news,
-              user: user
-            })
-          })
+      .then(resp => {
+        dispatch({
+          type: GET_NEWS,
+          load: false,
+          news: resp.news,
+          user: resp.user
+        })
       })
   }
 }
@@ -43,6 +39,7 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { load: action.load })
   },
   [GET_NEWS]: (state, action) => {
+    console.log('.....GET_NEWS', state, action)
     return Object.assign({}, state, action, { load: action.load })
   }
 }

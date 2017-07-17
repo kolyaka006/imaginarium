@@ -28,7 +28,7 @@ export const getNews = (id) => {
         dispatch({
           type: GET_NEWS,
           load: false,
-          news: resp
+          news: resp.news
         })
       })
   }
@@ -69,7 +69,8 @@ export const add = (news, id, poster) => {
     }).then(json => json.json())
       .then(resp => {
         if (poster) {
-          fetch(`/api/upload/${resp.news.id}/1`, {
+          console.log('.....resprespresprespresp', resp)
+          fetch(`/api/upload/${resp._id}/1`, {
             method: 'POST',
             body: poster.data
           })
@@ -78,14 +79,14 @@ export const add = (news, id, poster) => {
               dispatch({
                 type: ADD_NEWS,
                 load: false,
-                news: resp.news
+                news: resp
               })
             })
         } else {
           dispatch({
             type: ADD_NEWS,
             load: false,
-            news: resp.news
+            news: resp
           })
         }
       })
@@ -197,7 +198,6 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, action.info, { edit: action.edit })
   },
   [LOGOUT]: (state, action) => {
-    console.log('.....testLOGOUT', state, action)
     return Object.assign({}, { isLogin: action.isLogin })
   }
 }

@@ -27,7 +27,7 @@ export const getNews = (id) => {
         dispatch({
           type: GET_NEWS,
           load: false,
-          news: resp
+          news: resp.news
         })
       })
   }
@@ -118,6 +118,7 @@ const ACTION_HANDLERS = {
   },
   [ADD_NEWS]: (state, action) => {
     let news = state.news ? state.news : []
+    console.log('.....ADD_NEWS', state, action)
     return Object.assign({}, state, {
       news: [...news, { ...action.news }]
     }, { loadNews: action.load })
@@ -144,7 +145,7 @@ const ACTION_HANDLERS = {
   },
   [CHANGE_PAGE]: (state, action) => {
     return Object.assign({}, state, {
-      curPage: action.page
+      curPage: action.page < 0 ? 0 : action.page
     })
   },
   [CHANGE_CHECKED]: (state, action) => {

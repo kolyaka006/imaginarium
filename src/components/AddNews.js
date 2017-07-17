@@ -8,25 +8,25 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
       <div className='col-sm-12' >
         <form className='row' onSubmit={(e) => {
           e.preventDefault()
-          let value = {
-            input: !title.value.trim(),
-            description: !description.value.trim(),
-            tags: !tagsArray.value.trim()
-          }
-          let queryInput = {
-            input: document.querySelector('.inputTitle'),
-            description: document.querySelector('.inputDescription'),
-            tags: document.querySelector('.inputTags')
-          }
-          for (let item in queryInput) {
-            queryInput[item].classList.remove('error-input')
-          }
-          if (value.input || value.description || value.tags) {
-            for (let item in queryInput) {
-              value[item] ? queryInput[item].classList.add('error-input') : false
+            let value = {
+              input: !title.value.trim(),
+              description: !description.value.trim(),
+              tags: !tagsArray.value.trim()
             }
-            return
-          }
+            let queryInput = {
+              input: document.querySelector('.inputTitle'),
+              description: document.querySelector('.inputDescription'),
+              tags: document.querySelector('.inputTags')
+            }
+            for (let item in queryInput) {
+              queryInput[item].classList.remove('error-input')
+            }
+            if (value.input || value.description || value.tags) {
+              for (let item in queryInput) {
+                value[item] ? queryInput[item].classList.add('error-input') : false
+              }
+              return
+            }
           let clean = (arr) => {
             for (var i = 0; i < arr.length; i++) {
               if (arr[i] === undefined) {
@@ -52,21 +52,19 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
             let temp = clean(deleteSpace(tag))
             return temp.length > 0 ? temp.join(' ') : temp.join('')
           })
+          let preview = document.querySelector('#poster')
+          preview.src = ''
+          document.querySelector('.poster-avatar').classList.add('hide')
           add({ title: title.value,
             description: description.value,
             tags: tags,
-            user: { id: idUser, name: userName },
+            user: idUser,
             userAvatar: userAvatar },
             idUser, poster)
           title.value = ''
           description.value = ''
           tagsArray.value = ''
           poster = ''
-          let preview = document.querySelector('#poster')
-          let reader = new FileReader()
-          reader.onloadend = () => {
-            preview.src = ''
-          }
         }} >
           <div className='col-sm-12' >
             <input className='inputTitle form-control' placeholder='Title*' ref={input => { title = input }} />
@@ -117,7 +115,7 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
 
 AddNews.propTypes = {
   add: PropTypes.func.isRequired,
-  idUser: PropTypes.number,
+  idUser: PropTypes.string,
   userName: PropTypes.string,
   userAvatar: PropTypes.string,
   loadNews: PropTypes.bool

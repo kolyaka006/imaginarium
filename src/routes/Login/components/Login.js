@@ -24,7 +24,6 @@ let Login = ({ checkLogin, load = false, isLogin }) => {
           for (let item in queryInput) {
             queryInput[item].classList.remove('error-input')
           }
-          console.log('.....value', value)
           if (value.login || value.password) {
             for (let item in queryInput) {
               value[item] ? queryInput[item].classList.add('error-input') : false

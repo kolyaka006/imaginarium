@@ -2,12 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import ListNews from '../../../containers/ListNewsContainer'
-import DefProfile from '../../../../public/profile_users.jpg'
-const imageReq = require.context('../../../../server/upload', false, /\.png|\.jpeg|\.jpg$/)
 
 class Profile extends React.Component {
   componentDidMount () {
-    this.props.getNews(+this.props.params.id)
+    this.props.getNews(this.props.params.id)
   }
 
   render () {
@@ -16,7 +14,7 @@ class Profile extends React.Component {
         <div className='row' >
           <div className='col-sm-10 col-sm-offset-1 user-avatar' >
             <img className='user-avatar_img'
-              src={this.props.user.avatar ? imageReq(`./${this.props.user.avatar}`) : DefProfile}
+              src={this.props.user.avatar ? '/' + this.props.user.avatar + '?' + Date.now() : 'profile_users.jpg'}
               alt='user-avatar' />
           </div>
         </div>

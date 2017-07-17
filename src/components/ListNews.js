@@ -57,7 +57,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
           search(searchInput.value)
           searchInput.value = ''
         }} >
-          <input className='form-control' placeholder='Search by title, tags, users'
+          <input className='form-control' placeholder='Search by title, tags, users' defaultValue=''
             ref={node => { searchInput = node }} />
           <div className={`filters ${searchText ? '' : 'hide'}`} >
             <div className='filter-block' >
@@ -138,7 +138,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
 }
 
 ListNews.propTypes = {
-  idUser: PropTypes.number,
+  idUser: PropTypes.string,
   news: PropTypes.array,
   load: PropTypes.bool,
   filterArray: PropTypes.array,

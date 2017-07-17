@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
   return {
     news: state.news.news,
     load: state.user.load,
-    idUser: state.user.id,
+    idUser: state.user._id,
     curPage: state.news.curPage,
     filterArray: state.news.filterArray,
     checked: state.news.checked,

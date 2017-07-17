@@ -7,7 +7,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-  idUser : state.user.id,
+  idUser : state.user._id,
   loadNews : state.news.loadNews,
   userName : state.user.name,
   userAvatar : state.user.avatar,

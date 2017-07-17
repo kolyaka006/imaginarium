@@ -8,6 +8,7 @@ const compress = require('compression')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
+const mongoose = require('mongoose')
 
 const app = express()
 app.use(compress())
@@ -30,6 +31,12 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler, {
   path: '/__webpack_hmr'
 }))
+
+mongoose.connect('mongodb://localhost/reactNews')
+
+require('./model/User')
+require('./model/News')
+const model = require('../server/model/DB')
 app.use(bodyParser.json())
 app.use(bodyParser({ uploadDir:'../public' }))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -42,80 +49,76 @@ app.use(fileUpload())
 // when the application is compiled.
 app.use(express.static(path.resolve(project.basePath, 'public')))
 let usersArray = []
-let userID = 0
 let newsID = 0
 app.get('/api/login', (req, res) => {
-  console.log('.....req.query', req.query)
-  console.log('.....usersArray', usersArray)
-  usersArray.forEach(user => {
-    if (user.login === req.query.login && user.password === req.query.password) {
-      return res.send(user)
-    }
+  model.User.findOne({ login: req.query.login, password: req.query.password }, (err1, resp) => {
+    return resp
+      ? res.send(resp)
+      : model.User.create({
+        login: req.query.login,
+        password: req.query.password,
+        avatar: '',
+        name: req.query.login,
+        news: [] }, (err2, user) => {
+        return res.send(user)
+      })
   })
-  usersArray.push(Object.assign({}, req.query, { name: req.query.login, id: ++userID, news: [] }))
-  return res.json(Object.assign({}, req.query, { name: req.query.login, id: userID, news: [] }))
 })
 app.get('/api/userInfo', (req, res) => {
-  usersArray.forEach(user => {
-    if (user.id === +req.query.id) {
-      return res.json({ avatar: user.avatar, name: user.name })
-    }
+  model.User.findOne({ _id: req.query.id }, 'name avatar', (err, user) => {
+    model.News.find({ user: req.query.id }).populate('user', 'avatar name').exec((err, news) => {
+      return res.send({ user: user, news: news })
+    })
   })
 })
 app.get('/api/news', (req, res) => {
-  let news = []
-  usersArray.forEach(user => {
-    if (req.query.id === 'all' ? true : user.id === +req.query.id) {
-      news = [...news, ...user.news]
-    }
+  let query = req.query.id === 'all' ? {} : { user: req.query.id }
+  model.News.find(query).populate('user', 'avatar name').exec((err, resp) => {
+    return res.status(200).json({ news: resp, time: new Date().getTime() })
   })
-  return res.status(200).json(news)
 })
 app.patch('/api/user/:id', (req, res) => {
-  usersArray = usersArray.map(user => {
-    if (user.id === +req.params.id) {
-      user.name = req.body.info.name
+  model.User.update({ _id:req.params.id }, { name: req.body.info.name }, (err, resp) => {
+    if (err) {
+      return res.statusCode(500)
     }
-    return user
+    return res.json({ info: { name: req.body.info.name } })
   })
-  return res.json({ info: { name: req.body.info.name } })
 })
 app.post('/api/news', (req, res) => {
-  let news = Object.assign({}, req.body.news, {
-    created_at: new Date().toISOString(),
-    userID: req.body.id,
-    id: ++newsID })
-  if (req.body.poster) {
-    news.poster = 'newsID' + news.id + '.' + req.body.poster
+  let news = Object.assign({}, req.body.news, { user: req.body.id })
+  let sendUser = (id) => {
+    model.News.findById(id).populate('user', 'avatar name').exec((err, news) => {
+      res.json(news)
+    })
   }
-  usersArray = usersArray.map(user => {
-    if (user.id === +req.body.id) {
-      user.news = user.news || []
-      user.news.push(news)
+  model.News.create(news, (err, resp) => {
+    if (req.body.poster) {
+      news.poster = 'newsID' + resp._id + '.' + req.body.poster
+      resp.update({ poster: news.poster }, (err, upd) => {
+        sendUser(resp._id)
+      })
+    } else {
+      sendUser(resp._id)
     }
-    return user
   })
-  return res.status(200).json({ news: news })
 })
 
-app.post('/api/upload/:userID/:type', function (req, res) {
+app.post('/api/upload/:userID/:type', function (req, res, next) {
   let sampleFile = req.files.photo
   let avatarName = +req.params.type ? 'newsID' : 'userID'
   avatarName += req.params.userID + '.' + sampleFile.name.split('.').pop()
-  sampleFile.mv(__dirname + '/upload/' + avatarName, function (err) {
+  sampleFile.mv(path.resolve(__dirname, '../public/') + '/' + avatarName, function (err) {
     if (err) {
       return res.status(500).send(err)
     }
     if (!+req.params.type) {
-      usersArray = usersArray.map(user => {
-        if (user.id === +req.params.userID) {
-          user.avatar = user.avatar || ''
-          user.avatar = avatarName
-        }
-        return user
+      model.User.update({ _id: req.params.userID }, { avatar: avatarName }, { new: true }, (err, resp) => {
+        return res.json({ avatar: avatarName })
       })
+    } else {
+      return res.json({ poster: avatarName })
     }
-    return res.send({ avatar: avatarName })
   })
 })
 // This rewrites all routes requests to the root /index.html file

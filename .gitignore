@@ -3,6 +3,8 @@
 node_modules
 dist
 server/upload
+public/userID*
+public/newsID*
 coverage
 .idea/
 .yarn-cache
