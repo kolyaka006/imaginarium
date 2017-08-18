@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
+let AddNews = ({ add, idUser, userName, userAvatar, loadNews, getNews }) => {
   let title, description, tagsArray, poster
   return (
     <div className='row' style={{ marginTop: 15 }} >
@@ -65,6 +65,7 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
           description.value = ''
           tagsArray.value = ''
           poster = ''
+          getNews(idUser)
         }} >
           <div className='col-sm-12' >
             <input className='inputTitle form-control' placeholder='Title*' ref={input => { title = input }} />
@@ -115,6 +116,7 @@ let AddNews = ({ add, idUser, userName, userAvatar, loadNews }) => {
 
 AddNews.propTypes = {
   add: PropTypes.func.isRequired,
+  getNews: PropTypes.func.isRequired,
   idUser: PropTypes.string,
   userName: PropTypes.string,
   userAvatar: PropTypes.string,

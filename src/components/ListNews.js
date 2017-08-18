@@ -43,7 +43,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
   if (numberOfPages > 1) {
     for (let i = 0; i < numberOfPages; i++) {
       if ((curPage - 2 <= i) && (i <= curPage + 2)) {
-        pageRow.push(<div onClick={() => { changePage(i) }}
+        pageRow.push(<div key={i} onClick={() => { changePage(i) }}
           className={(() => curPage === i ? 'pagination__page pagination__page_active' : 'pagination__page')()} >
           {i + 1}</div>)
       }
@@ -107,7 +107,7 @@ let ListNews = ({ idUser, news = [], load, filterArray = [], curPage = 0, search
           if (actualPage && isSearch) {
             count++
             return (
-              <div className='col-xs-10 col-xs-offset-1' key={block.id} >
+              <div className='col-xs-10 col-xs-offset-1' key={index} >
                 <BlockNews news={block} />
               </div>
             )

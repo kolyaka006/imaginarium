@@ -14,7 +14,7 @@ class Profile extends React.Component {
         <div className='row' >
           <div className='col-sm-10 col-sm-offset-1 user-avatar' >
             <img className='user-avatar_img'
-              src={this.props.user.avatar ? '/' + this.props.user.avatar + '?' + Date.now() : 'profile_users.jpg'}
+              src={this.props.user.avatar ? '/' + this.props.user.avatar + '?' + Date.now() : '/profile_users.jpg'}
               alt='user-avatar' />
           </div>
         </div>

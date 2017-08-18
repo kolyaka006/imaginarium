@@ -111,16 +111,18 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { loadNews: action.load })
   },
   [GET_NEWS]: (state, action) => {
+    console.log('.....GET_NEWS news', state, action)
     return Object.assign({}, state, {
-      news: action.news,
+      news: action.news.reverse(),
       load: action.load
     })
   },
   [ADD_NEWS]: (state, action) => {
     let news = state.news ? state.news : []
-    console.log('.....ADD_NEWS', state, action)
+    news.unshift({ ...action.news })
+    console.log('.....ADD_NEWS news', state, action)
     return Object.assign({}, state, {
-      news: [...news, { ...action.news }]
+      news: news
     }, { loadNews: action.load })
   },
   [SEARCH_NEWS_END]: (state, action) => {

@@ -69,7 +69,6 @@ export const add = (news, id, poster) => {
     }).then(json => json.json())
       .then(resp => {
         if (poster) {
-          console.log('.....resprespresprespresp', resp)
           fetch(`/api/upload/${resp._id}/1`, {
             method: 'POST',
             body: poster.data
@@ -175,9 +174,6 @@ const ACTION_HANDLERS = {
   },
   [SEND_START_AVATAR]: (state, action) => {
     return Object.assign({}, state, { loadAvatar: action.load })
-  },
-  [GET_NEWS]: (state, action) => {
-    return Object.assign({}, state, { news: action.news, load: action.load })
   },
   [STATUS_EDIT]: (state, action) => {
     return Object.assign({}, state, { edit: action.edit })

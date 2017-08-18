@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
-import { add } from '../routes/User/modules/user'
+import { add, getNews } from '../routes/User/modules/user'
 import AddNews from '../components/AddNews'
 
 const mapDispatchToProps = {
-  add
+  add,
+  getNews
 }
 
 const mapStateToProps = (state) => ({

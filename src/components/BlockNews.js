@@ -9,7 +9,7 @@ class BlockNews extends React.Component {
         <div className='col-xs-12 text-left text-bold' style={{ fontSize: 24 }} >
           <div className='user-avatar_news' >
             <img className='user-avatar_img' src={this.props.news.user.avatar
-              ? '/' + this.props.news.user.avatar + '?' + Date.now() : 'profile_users.jpg'} />
+              ? '/' + this.props.news.user.avatar + '?' + Date.now() : '/profile_users.jpg'} />
           </div>
           <div className='news-block__title' >
             {this.props.news.title}
@@ -39,6 +39,8 @@ class BlockNews extends React.Component {
           </div>
           <div className='ib news-block__footer text-right text-bold' >
             {this.props.news.created_at.split('T')[0].split('-').reverse().join('-')}
+            {' '}
+            {this.props.news.created_at.split('T')[1].slice(0, 5)}
           </div>
         </div>
       </div>

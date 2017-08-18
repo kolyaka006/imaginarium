@@ -1,24 +1,43 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, browserHistory } from 'react-router'
+import { Link } from 'react-router'
 import './HomeView.scss'
-import ListNews from '../../../containers/ListNewsContainer'
 
 class HomeView extends React.Component {
-  componentDidMount () {
-    this.props.getNews('all')
-  }
-  render (isLogin = this &&   this.props ? this.props.isLogin : false) {
+  render () {
     return (
       <div>
-        { this.props.isLogin ? '' : browserHistory.push('/login') }
-        <h4>Welcome, <Link to='/user' >{this.props.name}</Link>!
-          <div className='logout' onClick={this.props.logout}>
-            <i className='glyphicon glyphicon-off' style={{ verticalAlign: 'text-top' }}></i> logout</div>
-        </h4>
-        <div className='row' >
-          <div className='col-sm-10 col-sm-offset-1' >
-            {this.props.isLogin ? <ListNews /> : ''}
+        <div className='top' >
+          <div className='avatar'>
+            <div className='avatar__img-block'>
+              <img src='' alt='avatar image' />
+            </div>
+            <div className='avatar__name'>Test name</div>
+          </div>
+          <div className='games'>
+            <div>Current Game</div>
+            <div className='games__list'>
+              <div className='games__list_game'>game</div>
+            </div>
+            <button className='games__button'>
+              <Link to={`/game`}>
+                Create game
+              </Link>
+            </button>
+          </div>
+        </div>
+        <div className='bottom'>
+          <div className='chat'>
+            <div className='chat__messages-block'>
+              <div className='chat__message'>
+                message
+              </div>
+            </div>
+            <div className='chat__input-block'>
+              <input className='chat__input' />
+              <button className='chat__input_send'>
+                Send
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -27,10 +46,6 @@ class HomeView extends React.Component {
 }
 
 HomeView.propTypes = {
-  isLogin: PropTypes.bool,
-  name: PropTypes.string,
-  getNews: PropTypes.func,
-  logout: PropTypes.func,
 }
 
 export default HomeView

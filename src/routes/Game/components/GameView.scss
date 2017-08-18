@@ -1,0 +1,144 @@
+$color1: '#0F1D68';
+$color2: '#423151';
+$color3: '#9E7FA9';
+$color4: '#FFF38D';
+$color5: '#FDD448';
+
+body {
+  background-image: url('/ES1yKvn3yLI.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+.content {
+  font-size: 16px;
+}
+
+.clearfix {
+  clear: both;
+  display: table;
+  content: "";
+}
+
+.top {
+  width: 100%;
+}
+
+.score {
+  float: left;
+  border: 4px ridge #FDD448;
+  border-radius: 5px;
+}
+
+.word {
+  width: 60%;
+  display: inline-block;
+  margin: auto;
+  background-color: white;
+  border: 2px ridge;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.cards-block {
+  float: right;
+}
+
+.user-block {
+  height: 4rem;
+}
+
+.avatar-mini {
+  width: 50%;
+  height: 80%;
+  box-sizing: border-box;
+  display: table-cell;
+}
+
+.avatar-mini__img {
+  width: 80%;
+  height: 80%;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.cards {
+  width: 12rem;
+  position: relative;
+  margin-right: 6rem;
+}
+
+.cards__img {
+  transform: rotate(-90deg);
+  width: 100%;
+}
+
+.cards-score {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  font-size: 5rem;
+  height: 7rem;
+  color: #0f00f4;
+  text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+}
+
+.desk {
+  margin: 2rem 0;
+}
+
+.bottom {
+  position: relative;
+  width: 100%;
+  top: 79px;
+  left: 0;
+  text-align: center;
+  padding: 4rem 0;
+  border-top: 3px solid #FFF38D;
+}
+
+.hand-card, .desk-card {
+  display: inline-block;
+  position: relative;
+  bottom: 0;
+  width: 10rem;
+  height: auto;
+  margin: 0 2rem;
+  cursor: pointer;
+  transition: all .5s ease;
+  z-index: 10;
+  border: 2px solid #68b2c6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.hand-card:hover, .desk-card:hover {
+  transform: scale(2.5    );
+  bottom: 80px;
+  z-index: 15;
+}
+
+.hand-card img, .desk-card img{
+  width: 100%;
+}
+
+.hand__btn-choice {
+  margin-top: 3rem;
+}
+
+.hand-card__active {
+  box-shadow: 0 0 25px 5px #FDD448;
+}
+
+.desk-card {
+  width: 15rem;
+}
+
+.desk-card:hover {
+  transform: scale(1.7);
+  bottom: 45px;
+}

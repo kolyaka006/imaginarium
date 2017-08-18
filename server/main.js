@@ -86,7 +86,7 @@ app.patch('/api/user/:id', (req, res) => {
   })
 })
 app.post('/api/news', (req, res) => {
-  let news = Object.assign({}, req.body.news, { user: req.body.id })
+  let news = Object.assign({}, req.body.news, { user: req.body.id, created_at: new Date() })
   let sendUser = (id) => {
     model.News.findById(id).populate('user', 'avatar name').exec((err, news) => {
       res.json(news)

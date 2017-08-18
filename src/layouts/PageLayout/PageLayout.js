@@ -4,7 +4,7 @@ import './PageLayout.scss'
 
 export const PageLayout = ({ children }) => (
   <div className='text-center' >
-    <h1>React Redux News</h1>
+    <h1 style={{ color: '#FFF38D' }}>Test imaginarium</h1>
     {children}
   </div>
 )
