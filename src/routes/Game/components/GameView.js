@@ -55,7 +55,7 @@ class GameView extends React.Component {
         </div>
         <div className='middle row'>
           <div className='desk'>
-            {randcard().map((item, index) => {
+            {this.props.desk.map((item, index) => {
               return (<div className='desk-card' key={index}>
                 <img className='desk-card__img' src={item} alt='card' />
               </div>)
@@ -74,7 +74,8 @@ GameView.propTypes = {
   getBlockCard: PropTypes.func,
   getHand: PropTypes.func,
   BlockCards: PropTypes.array,
-  hand: PropTypes.array
+  hand: PropTypes.array,
+  desk: PropTypes.array
 }
 
 export default GameView

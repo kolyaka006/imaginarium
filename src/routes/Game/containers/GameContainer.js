@@ -11,7 +11,8 @@ const mapStateToProps = (state) => {
   return ({
     BlockCards: state.game.blockCards || [],
     activeCard: state.game.activeCard,
-    hand: state.game.hand
+    hand: state.game.hand || [],
+    desk: state.game.desk || []
   })
 }
 
