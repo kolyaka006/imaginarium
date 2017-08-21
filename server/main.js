@@ -9,6 +9,8 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const mongoose = require('mongoose')
+const SocketIo = require('socket.io')
+
 
 const app = express()
 app.use(compress())
@@ -35,7 +37,7 @@ app.use(require('webpack-hot-middleware')(compiler, {
 mongoose.connect('mongodb://localhost/reactNews')
 
 require('./model/User')
-require('./model/News')
+require('./model/Game')
 const model = require('../server/model/DB')
 app.use(bodyParser.json())
 app.use(bodyParser({ uploadDir:'../public' }))
@@ -48,6 +50,7 @@ app.use(fileUpload())
 // of development since this directory will be copied into ~/dist
 // when the application is compiled.
 app.use(express.static(path.resolve(project.basePath, 'public')))
+
 let usersArray = []
 let newsID = 0
 app.get('/api/login', (req, res) => {
@@ -71,10 +74,9 @@ app.get('/api/userInfo', (req, res) => {
     })
   })
 })
-app.get('/api/news', (req, res) => {
-  let query = req.query.id === 'all' ? {} : { user: req.query.id }
-  model.News.find(query).populate('user', 'avatar name').exec((err, resp) => {
-    return res.status(200).json({ news: resp, time: new Date().getTime() })
+app.get('/api/game/:id', (req, res) => {
+  model.Game.findById(req.params.id).exec((err, resp) => {
+    return res.status(200).json({ game: resp })
   })
 })
 app.patch('/api/user/:id', (req, res) => {
@@ -121,9 +123,6 @@ app.post('/api/upload/:userID/:type', function (req, res, next) {
     }
   })
 })
-// This rewrites all routes requests to the root /index.html file
-// (ignoring file requests). If you want to implement universal
-// rendering, you'll want to remove this middleware.
 app.use('*', function (req, res, next) {
   const filename = path.join(compiler.outputPath, 'index.html')
   compiler.outputFileSystem.readFile(filename, (err, result) => {
@@ -135,19 +134,13 @@ app.use('*', function (req, res, next) {
     res.end()
   })
 })
-//} else {
-//  logger.warn(
-//    'Server is being run outside of live development mode, meaning it will ' +
-//    'only serve the compiled application bundle in ~/dist. Generally you ' +
-//    'do not need an application server for this and can instead use a web ' +
-//    'server such as nginx to serve your static files. See the "deployment" ' +
-//    'section in the README for more information on deployment strategies.'
-//  )
-//
-//  // Serving ~/dist by default. Ideally these files should be served by
-//  // the web server and not the app server, but this helps to demo the
-//  // server in production.
-//  app.use(express.static(path.resolve(project.basePath, project.outDir)))
-//}
+
+logger.info('Starting server...')
+const server = app.listen(8000, () => {
+  logger.success('Server is running at http://localhost:8000')
+})
+
+const io = new SocketIo(server, {path: '/api/chat'})
+const socketEvents = require('./socketEvents')(io)
 
 module.exports = app

@@ -27,9 +27,11 @@ body {
 
 .score {
   float: left;
-  border: 4px ridge #FDD448;
+  border: 4px ridge #2e6da4;
   border-radius: 5px;
   margin-left: 2rem;
+  width: 20rem;
+  background-color: #d9edf7;
 }
 
 .word {
@@ -40,28 +42,63 @@ body {
   border: 2px ridge;
   border-radius: 4px;
   padding: 1rem;
+  height: 60px;
+  line-height: 30px;
 }
 
 .cards-block {
   float: right;
+  width: calc(40% - 35rem);
+  position: relative;
+  bottom: 3.5rem;
 }
 
 .user-block {
   height: 4rem;
+  border-bottom: 2px ridge #2e6da4;
+  width:100%;
+}
+
+.user-score {
+  padding: .8rem 0;
+}
+
+.user-score_active {
+  background-color: #c8e99a;
 }
 
 .avatar-mini {
-  width: 50%;
-  height: 80%;
+  width: 4rem;
   box-sizing: border-box;
   display: table-cell;
 }
 
-.avatar-mini__img {
-  width: 80%;
-  height: 80%;
+.avatar-color-1 {
+  background-color: #e29898;
+}
+
+.avatar-color-2 {
+  background-color: #7aac8c;
+}
+
+.avatar-color-3 {
+  background-color: #27408b;
+}
+
+.avatar-color-4 {
+  background-color: #ff9936;
+}
+
+.avatar-color-5 {
   background-color: black;
-  border-radius: 50%;
+}
+
+.avatar-color-6 {
+  background-color: #510014;
+}
+
+.avatar-color-7 {
+  background-color: #fffff0;
 }
 
 .cards {
@@ -141,5 +178,4 @@ body {
 
 .desk-card:hover {
   transform: scale(1.7);
-  bottom: 45px;
 }

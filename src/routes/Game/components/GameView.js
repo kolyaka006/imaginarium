@@ -1,51 +1,50 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Hand from '../../../components/Hand'
+import Hand from '../../../containers/HandContainer'
 import './GameView.scss'
+import io from 'socket.io-client'
+const socket = io('', { path: '/api/chat' });
 
 class GameView extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { associated: '' }
+    socket.emit('chat mounted', (test) => {
+      console.log('.....test emit', test)
+    })
+    socket.on('receive socket', (test) => {
+      console.log('.....test on', test)
+    })
+  }
   componentDidMount () {
     this.props.getBlockCard()
     this.props.getHand()
   }
+
+  setChoice () {
+    this.props.step === 'hand' ? this.props.addCardOnDesk(this.state.associated.value) : false
+  }
+
   render () {
-    let randcard = () => {
-      let temp = [];
-      for (let i = 0; i < 7; i++) {
-        temp.push(this.props.BlockCards[(Math.random() * 10000).toFixed(0) % 398])
-      }
-      return temp
-    }
     return (
       <div className='content row'>
         <div className='top clearfix'>
           <div className='score'>
-            <div className='user-block clearfix'>
-              <div className='avatar-mini'>
-                <img className='avatar-mini__img' src='/favicon.ico' alt='avatar-mini' />
-              </div>
-              <div className='user-score'>0</div>
-            </div>
-            <div className='user-block clearfix'>
-              <div className='avatar-mini'>
-                <img className='avatar-mini__img' src='/favicon.ico' alt='avatar-mini' />
-              </div>
-              <div className='user-score'>0</div>
-            </div>
-            <div className='user-block clearfix'>
-              <div className='avatar-mini'>
-                <img className='avatar-mini__img' src='/favicon.ico' alt='avatar-mini' />
-              </div>
-              <div className='user-score'>0</div>
-            </div>
-            <div className='user-block clearfix'>
-              <div className='avatar-mini'>
-                <img className='avatar-mini__img' src='/favicon.ico' alt='avatar-mini' />
-              </div>
-              <div className='user-score'>0</div>
-            </div>
+            {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
+              return (<div className='user-block clearfix' key={index}>
+                <div className={`avatar-mini avatar-color-${index + 1}`}>{}</div>
+                <div className='user-score'>Test Name{index + 1}: 0</div>
+              </div>)
+            })}
           </div>
-          <div className='word'>Test associated</div>
+          <div className='word'>
+            { (() => {
+              return this.props.youStep ? <input className='form-control input-associated'
+                ref={associated => { this.state.associated = associated }}
+              /> : this.props.associated
+            })()
+            }
+          </div>
           <div className='cards-block'>
             <div className='cards'>
               <img className='cards__img' src='/backCard.png' alt='card' />
@@ -61,9 +60,26 @@ class GameView extends React.Component {
               </div>)
             })}
           </div>
+          {(() => {
+            return (this.props.youStep && this.props.step === 'desk'
+              ? <button className='hand__btn-choice btn btn-primary'
+                onClick={() => { return this.setChoice() }}>
+              Потвердить выбор
+            </button> : '')
+          })()
+          }
         </div>
         <div className='bottom'>
-          <Hand arrHand={this.props.hand || []}></Hand>
+          <Hand arrHand={this.props.hand || []} activeCard={this.props.activeCard} />
+          <div>
+            {(() => {
+              return (this.props.step === 'hand' ? <button className='hand__btn-choice btn btn-primary' onClick={() =>
+              { return this.setChoice() }}>
+                Потвердить выбор
+              </button> : '')
+            })()
+            }
+          </div>
         </div>
       </div>
     )
@@ -72,10 +88,15 @@ class GameView extends React.Component {
 
 GameView.propTypes = {
   getBlockCard: PropTypes.func,
+  addCardOnDesk: PropTypes.func,
   getHand: PropTypes.func,
   BlockCards: PropTypes.array,
   hand: PropTypes.array,
-  desk: PropTypes.array
+  desk: PropTypes.array,
+  step: PropTypes.string,
+  associated: PropTypes.string,
+  youStep: PropTypes.bool,
+  activeCard: PropTypes.number,
 }
 
 export default GameView
