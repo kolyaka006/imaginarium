@@ -12,9 +12,9 @@ import ProfileRoute from './Profile/index'
 export const createRoutes = (store) => ({
   path        : '/',
   component   : CoreLayout,
-  indexRoute  : Home(store),
+  indexRoute  : LoginRoute(store),
   childRoutes : [
-    LoginRoute(store),
+    Home(store),
     UserRoute(store),
     GameRoute(store),
     ProfileRoute(store)

@@ -1,5 +1,6 @@
 exports = module.exports = (io) => {
   io.on('connection', (socket) => {
+    console.log('.....socket', socket.rooms)
     socket.join('Lobby')
     socket.on('chat mounted', (user) => {
       // TODO: Does the server need to know the user?

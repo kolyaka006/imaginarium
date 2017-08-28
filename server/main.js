@@ -140,7 +140,7 @@ const server = app.listen(8000, () => {
   logger.success('Server is running at http://localhost:8000')
 })
 
-const io = new SocketIo(server, {path: '/api/chat'})
+const io = new SocketIo(server, { path: '/api/chat' })
 const socketEvents = require('./socketEvents')(io)
 
 module.exports = app
