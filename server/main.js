@@ -139,7 +139,7 @@ app.use('*', function (req, res, next) {
 
 logger.info('Starting server...')
 const server = app.listen(process.env.PORT || 8000, () => {
-  logger.success('Server is running at http://localhost:8000')
+  logger.success('Server is running at http://localhost:' + process.env.PORT)
 })
 
 const io = new SocketIo(server, { path: '/api/chat' })
