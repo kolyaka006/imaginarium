@@ -34,7 +34,9 @@ app.use(require('webpack-hot-middleware')(compiler, {
   path: '/__webpack_hmr'
 }))
 
-mongoose.connect('mongodb://localhost/reactNews')
+mongoose.connect('mongodb://kolyaka:nanaki123@cluster0-shard-00-00-zr61a.mongodb.net:27017,' +
+  'cluster0-shard-00-01-zr61a.mongodb.net:27017,cluster0-shard-00-02-zr61a.mongodb.net:27017/' +
+  'testDB?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
 
 require('./model/User')
 require('./model/Game')
