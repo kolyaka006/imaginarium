@@ -11,6 +11,7 @@ export const EDIT_USER_INFO = 'EDIT_USER_INFO'
 export const STATUS_EDIT = 'STATUS_EDIT'
 export const SEND_REQUEST = 'SEND_REQUEST'
 export const CHECK_LOGIN = 'CHECK_LOGIN'
+export const SET_USER_ID= 'SET_USER_ID'
 export const LOGOUT = 'LOGOUT'
 
 // ------------------------------------
@@ -153,6 +154,14 @@ export const logout = () => {
     })
   }
 }
+export const setUserId = (id) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_USER_ID,
+      userId: id
+    })
+  }
+}
 
 export const actions = {
   getNews,
@@ -161,7 +170,8 @@ export const actions = {
   changeAvatar,
   editStatus,
   changeUserInfo,
-  logout
+  logout,
+  setUserId
 }
 
 // ------------------------------------
@@ -195,6 +205,9 @@ const ACTION_HANDLERS = {
   },
   [LOGOUT]: (state, action) => {
     return Object.assign({}, { isLogin: action.isLogin })
+  },
+  [SET_USER_ID]: (state, action) => {
+    return Object.assign({}, state, { userId: action.userId })
   }
 }
 

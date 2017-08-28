@@ -2,8 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import './HomeView.scss'
+import io from 'socket.io-client'
+const socket = io('', { path: '/api/chat' })
 
 class HomeView extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { associated: '' }
+  }
+  componentDidMount () {
+    socket.emit('user login', (test) => {
+      console.log('.....test emit', test)
+    })
+    socket.on('sendUserId', (userId) => {
+      this.props.setUserId(userId)
+      console.log('.....test on', userId)
+    })
+  }
+
   render () {
     return (
       <div>
@@ -12,11 +28,17 @@ class HomeView extends React.Component {
             <div className='col-md-4 avatar-block text-center' >
               { console.log('.....this.props.user', this.props.user) }
               <div className='avatar-block__avatar-name col-md-12' >Name:
-                { this.props.user ? ' ' + this.props.user.name : '' }</div>
+                { this.props.user ? ' ' + this.props.user.name : '' }
+              </div>
               <div className='col-md-12' >
-                <Link to={'/'} onClick={() => { return this.props.logout() }} >
-                  <button>Logout</button>
-                </Link>
+                <div className='avatar-block__avatar-name col-md-12' >socketID:
+                  { this.props.userId ? ' ' + this.props.user.userId : '' }
+                </div>
+                <div className='col-md-12' >
+                  <Link to={'/'} onClick={() => { return this.props.logout() }} >
+                    <button>Logout</button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -45,7 +67,7 @@ class HomeView extends React.Component {
               <div className='chat__messages-block_messages' >
                 {
                   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse().map((message) => {
-                    return (<div className='chat__message text-left' >
+                    return (<div className='chat__message text-left' key={message}>
                       {new Date().toTimeString().split(' ')[0]} message {message}
                     </div>)
                   })
@@ -65,13 +87,15 @@ class HomeView extends React.Component {
           </div>
         </div>
       </div>
-  )
+    )
   }
   }
 
-  HomeView.propTypes = {
-    user: PropTypes.object,
-    logout: PropTypes.func
-  }
+HomeView.propTypes = {
+  user: PropTypes.object,
+  logout: PropTypes.func,
+  userId: PropTypes.string,
+  setUserId: PropTypes.func
+}
 
-  export default HomeView
+export default HomeView

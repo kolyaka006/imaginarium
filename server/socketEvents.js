@@ -2,9 +2,9 @@ exports = module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log('.....socket', socket.rooms)
     socket.join('Lobby')
-    socket.on('chat mounted', (user) => {
+    socket.on('user login', (user) => {
       // TODO: Does the server need to know the user?
-      socket.emit('receive socket', socket.id)
+      socket.emit('sendUserId', socket.id)
     })
     socket.on('leave channel', (channel) => {
       socket.leave(channel)

@@ -4,7 +4,7 @@ import Hand from '../../../containers/HandContainer'
 import { Link } from 'react-router'
 import './GameView.scss'
 import io from 'socket.io-client'
-const socket = io('', { path: '/api/chat' });
+const socket = io('', { path: '/api/chat' })
 
 class GameView extends React.Component {
   constructor (props) {
