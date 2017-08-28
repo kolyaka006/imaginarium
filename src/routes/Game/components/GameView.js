@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Hand from '../../../containers/HandContainer'
+import { Link } from 'react-router'
 import './GameView.scss'
 import io from 'socket.io-client'
 const socket = io('', { path: '/api/chat' });
@@ -27,59 +28,68 @@ class GameView extends React.Component {
 
   render () {
     return (
-      <div className='content row'>
-        <div className='top clearfix'>
-          <div className='score'>
-            {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
-              return (<div className='user-block clearfix' key={index}>
-                <div className={`avatar-mini avatar-color-${index + 1}`}>{}</div>
-                <div className='user-score'>Test Name{index + 1}: 0</div>
-              </div>)
-            })}
+      <div>
+        <div className='row'>
+          <div className='col-md-6 text-right col-md-offset-6 game-content__logout'>
+            <Link to={'/home'}>
+              <button className='btn'>Back</button>
+            </Link>
           </div>
-          <div className='word'>
-            { (() => {
-              return this.props.youStep ? <input className='form-control input-associated'
-                ref={associated => { this.state.associated = associated }}
-              /> : this.props.associated
-            })()
-            }
-          </div>
-          <div className='cards-block'>
-            <div className='cards'>
-              <img className='cards__img' src='/backCard.png' alt='card' />
-              <div className='cards-score'>{this.props.BlockCards.length}</div>
+        </div>
+        <div className='content row'>
+            <div className='top clearfix'>
+              <div className='score'>
+                {[1, 2, 3, 4, 5, 6, 7].map((item, index) => {
+                  return (<div className='user-block clearfix' key={index}>
+                    <div className={`avatar-mini avatar-color-${index + 1}`}>{}</div>
+                    <div className='user-score'>Test Name{index + 1}: 0</div>
+                  </div>)
+                })}
+              </div>
+              <div className='word'>
+                { (() => {
+                  return this.props.youStep ? <input className='form-control input-associated'
+                    ref={associated => { this.state.associated = associated }}
+                  /> : this.props.associated
+                })()
+                }
+              </div>
+              <div className='cards-block'>
+                <div className='cards'>
+                  <img className='cards__img' src='/backCard.png' alt='card' />
+                  <div className='cards-score'>{this.props.BlockCards.length}</div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className='middle row'>
-          <div className='desk'>
-            {this.props.desk.map((item, index) => {
-              return (<div className='desk-card' key={index}>
-                <img className='desk-card__img' src={item} alt='card' />
-              </div>)
-            })}
-          </div>
-          {(() => {
-            return (this.props.youStep && this.props.step === 'desk'
-              ? <button className='hand__btn-choice btn btn-primary'
-                onClick={() => { return this.setChoice() }}>
-              Потвердить выбор
-            </button> : '')
-          })()
-          }
-        </div>
-        <div className='bottom'>
-          <Hand arrHand={this.props.hand || []} activeCard={this.props.activeCard} />
-          <div>
-            {(() => {
-              return (this.props.step === 'hand' ? <button className='hand__btn-choice btn btn-primary' onClick={() =>
-              { return this.setChoice() }}>
-                Потвердить выбор
-              </button> : '')
-            })()
-            }
-          </div>
+            <div className='middle row'>
+              <div className='desk'>
+                {this.props.desk.map((item, index) => {
+                  return (<div className='desk-card' key={index}>
+                    <img className='desk-card__img' src={item} alt='card' />
+                  </div>)
+                })}
+              </div>
+              {(() => {
+                return (this.props.youStep && this.props.step === 'desk'
+                  ? <button className='hand__btn-choice btn btn-primary'
+                    onClick={() => { return this.setChoice() }}>
+                  Потвердить выбор
+                </button> : '')
+              })()
+              }
+            </div>
+            <div className='bottom'>
+              <Hand arrHand={this.props.hand || []} activeCard={this.props.activeCard} />
+              <div>
+                {(() => {
+                  return (this.props.step === 'hand' ? <button className='hand__btn-choice btn btn-primary' onClick={() =>
+                  { return this.setChoice() }}>
+                    Потвердить выбор
+                  </button> : '')
+                })()
+                }
+              </div>
+            </div>
         </div>
       </div>
     )

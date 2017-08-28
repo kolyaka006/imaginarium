@@ -41,7 +41,7 @@ let Login = ({ checkLogin, load = false, isLogin, user }) => {
           </div>
           <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 15 }}>
             <input type='password' className='form-control inputPassword' placeholder='Password'
-                   ref={node => { password = node }} />
+              ref={node => { password = node }} />
           </div>
           <button className={'btn btn-login btn-login col-sm-2 col-sm-offset-5 ' +
           'col-xs-6 col-xs-offset-3'} disabled={load}>

@@ -7,7 +7,7 @@ class HomeView extends React.Component {
   render () {
     return (
       <div>
-        <div className='top row' >
+        <div className='home-top row' >
           <div className='avatar col-md-6 text-left' >
             <div className='col-md-4 avatar-block text-center' >
               { console.log('.....this.props.user', this.props.user) }
@@ -39,7 +39,7 @@ class HomeView extends React.Component {
             </div>
           </div>
         </div>
-        <div className='bottom' >
+        <div className='home-bottom' >
           <div className='chat' >
             <div className='chat__messages-block' >
               <div className='chat__messages-block_messages' >
