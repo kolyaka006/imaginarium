@@ -22,7 +22,39 @@
 
 
 body {
-  background-color: #e8e8e8;
+  background-image: url('/ES1yKvn3yLI.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+.header-font {
+  color: #c8e99a;
+  font-size: 7rem;
+}
+
+.btn-login {
+  text-shadow: 0 1px 0 #fff;
+  background-image: -webkit-linear-gradient(top,#fff 0,#e0e0e0 100%);
+  background-image: -o-linear-gradient(top,#fff 0,#e0e0e0 100%);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e0e0e0));
+  background-image: linear-gradient(to bottom,#916d4d 0,#251203 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+  background-repeat: repeat-x;
+  border-color: #61452c;
+  color: white;
+}
+
+.btn-login:focus, .btn-login:hover {
+  color: white;
+  background-color: #51351f;
+}
+
+.login-form {
+  background-color: oldlace;
+  border-radius: 5px;
+  padding: 2rem;
+  border: 7px ridge #957356;
 }
 
 .loader,

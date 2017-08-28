@@ -1,0 +1,74 @@
+.avatar-block {
+  background-color: oldlace;
+  border-radius: 5px;
+  padding: 2rem;
+  border: 7px ridge #957356;
+}
+
+.avatar-block__avatar-name {
+  margin-bottom: 2rem;
+}
+
+.games {
+  background-color: oldlace;
+  border: 7px ridge #957356;
+  border-radius: 5px;
+  padding: 0;
+}
+
+.games__header {
+  border-bottom: 1px solid;
+  font-size: 2.5rem;
+}
+
+.games__footer {
+  border-top: 1px solid;
+  padding: 1rem;
+}
+
+.games__button {
+  color: white;
+  width: 100%;
+  padding: 0.5rem;
+  background-image: -webkit-linear-gradient(top,#916d4d 0,#251203 100%);
+  background-image: -o-linear-gradient(top,#916d4d 0,#251203 100%);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#916d4d),to(#251203));
+  background-image: linear-gradient(to bottom,#916d4d 0,#251203 100%);
+}
+
+.bottom {
+  position: absolute;
+  bottom: 10px;
+  width: 98%;
+}
+
+.chat {
+  width: 50%;
+  margin: auto;
+  height: auto;
+  min-height: 15rem;
+  background-color: oldlace;
+  border: 7px ridge #957356;
+  border-radius: 5px;
+  padding: 0;
+}
+
+.chat__input-block {
+  position: absolute;
+  bottom: 15px;
+  margin: auto;
+  width: 49%;
+}
+
+.chat__messages-block {
+  background-color: white;
+  height: 6em;
+  border-bottom: 1px solid;
+  position: relative;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.chat__message {
+  padding: 0.4rem 0;
+}

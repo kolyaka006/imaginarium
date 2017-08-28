@@ -185,7 +185,7 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { avatar: action.avatar, loadAvatar: action.load })
   },
   [CHECK_LOGIN]: (state, action) => {
-    return Object.assign({}, state, action.user, {
+    return Object.assign({}, state, { user: action.user }, {
       isLogin: action.isLogin,
       load: action.load
     })
