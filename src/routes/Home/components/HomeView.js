@@ -9,22 +9,19 @@ class HomeView extends React.Component {
   constructor (props) {
     super(props)
     this.state = { associated: '', message: '' }
-    console.log('.....test mess1')
-    socket.on('new message', mess => {
-      console.log('.....test mess2')
-      this.props.addMessInChat(mess)
-    })
+    console.log('.....this.props.games', this.props.games)
   }
   componentDidMount () {
     socket.emit('userLogin')
     socket.on('sendUserId', (userId) => {
       this.props.setUserId(userId)
+      socket.on('historyChat', history => {
+        console.log('.....test history', history)
+        this.props.addMessInChat(JSON.parse(history))
+      })
     })
   }
-  sendMessage (text) {
-    let _text = '' + text
-    let obj = JSON.stringify({ chat: 'globalChat', message: _text })
-    socket.emit('newMessage', obj)
+  componentWillReceiveProps () {
   }
 
   render () {
@@ -52,17 +49,17 @@ class HomeView extends React.Component {
             <div className='games col-md-6 col-md-offset-6 text-center' >
               <div className='games__header' >Current Game</div>
               <div className='games__list' >
-                { !this.props.games ? <div className='games__list_game' >No games created</div>
+                { !this.props.games.length ? <div className='games__list_game' >No games created</div>
                   : this.props.games.map((game) => {
-                    return (<div className='games__list_game' >{game.name}</div>)
+                    return (<Link to={`/game/${game}`} ><div className='games__list_game' >{game}</div></Link>)
                   })}
               </div>
               <div className='games__footer' >
-                <Link to={`/game`} >
-                  <button className='games__button' >
-                    Create game
-                  </button>
-                </Link>
+                <button className='games__button' onClick={() => {
+                  return this.props.createGame(this.props.user.userId)
+                }}>
+                  Create game
+                </button>
               </div>
             </div>
           </div>
@@ -70,13 +67,12 @@ class HomeView extends React.Component {
         <div className='home-bottom' >
           <div className='chat' >
             <div className='chat__messages-block' >
-              {console.log('.....this.state', this.props)}
-              <div className='chat__messages-block_messages' >
+              <div className='chat__messages-block_messages' ref={(chatBlock) => { this.chatBlock = chatBlock }} >
+                { console.log('.....this.props.arrChat', this.props.arrChat) }
                 {
-                  this.props.arrChat.reverse().map((message, index) => {
-                    console.log('.....message, index', message, index)
+                  this.props.arrChat.map((message, index) => {
                     return (<div className='chat__message text-left' key={index}>
-                      {message.time} {message.message}
+                      <b>{new Date(message.created_at).toTimeString().split(' ')[0]}</b> {message.text}
                     </div>)
                   })
                 }
@@ -84,14 +80,21 @@ class HomeView extends React.Component {
             </div>
             <div className='chat__input-block row'>
               <div className='col-md-12'>
-                <div className='input-group'>
-                  <input type='text' className='form-control' ref={mess => { this.state.message = mess }} />
-                  <span className='input-group-btn'>
-                    <button className='btn btn-default' type='button' onClick={() => {
-                      return this.sendMessage(this.state.message.value)
-                    }}>Send</button>
-                  </span>
-                </div>
+                <form onSubmit={(e) => {
+                  e.preventDefault()
+                  let obj = JSON.stringify({ userId: this.props.user.userId,
+                    room: 'globalChat',
+                    message: this.state.message.value })
+                  socket.emit('newMessage', obj)
+                  this.state.message.value = ''
+                }}>
+                  <div className='input-group'>
+                    <input type='text' className='form-control' ref={mess => { this.state.message = mess }} />
+                    <span className='input-group-btn'>
+                      <button type='Submit' className='btn btn-default'>Send</button>
+                    </span>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -107,7 +110,9 @@ HomeView.propTypes = {
   userId: PropTypes.string,
   setUserId: PropTypes.func,
   arrChat: PropTypes.array,
-  addMessInChat: PropTypes.func
+  games: PropTypes.array,
+  addMessInChat: PropTypes.func,
+  createGame: PropTypes.func
 }
 
 export default HomeView

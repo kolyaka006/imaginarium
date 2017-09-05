@@ -8,6 +8,7 @@ export const GET_NEWS = 'GET_NEWS'
 export const ADD_NEWS = 'ADD_NEWS'
 export const CHANGE_AVATAR = 'CHANGE_AVATAR'
 export const EDIT_USER_INFO = 'EDIT_USER_INFO'
+export const CREATE_GAME = 'CREATE_GAME'
 export const STATUS_EDIT = 'STATUS_EDIT'
 export const SEND_REQUEST = 'SEND_REQUEST'
 export const CHECK_LOGIN = 'CHECK_LOGIN'
@@ -148,6 +149,31 @@ export const changeUserInfo = (info, id) => {
   }
 }
 
+export const createGame = (id) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SEND_START,
+      load: true
+    })
+    fetch(`/api/game`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({ userId: id })
+    }).then(json => json.json())
+      .then(resp => {
+        console.log('.....resp', resp)
+        dispatch({
+          type: CREATE_GAME,
+          load: false,
+          game: resp._id
+        })
+      })
+  }
+}
+
 export const editStatus = () => {
   return (dispatch, getState) => {
     dispatch({
@@ -176,7 +202,7 @@ export const setUserId = (id) => {
 }
 export const addMessInChat = (data) => {
   return (dispatch, getState) => {
-    console.log('.....test addMessInChat')
+    console.log('.....test addMessInChat', data)
     dispatch({
       type: ADD_MESSAGE_IN_CHAT,
       message: data
@@ -193,7 +219,8 @@ export const actions = {
   changeUserInfo,
   logout,
   setUserId,
-  addMessInChat
+  addMessInChat,
+  createGame
 }
 
 // ------------------------------------
@@ -233,14 +260,17 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { userId: action.userId })
   },
   [ADD_MESSAGE_IN_CHAT]: (state, action) => {
-    return Object.assign({}, state, { arrChat: [...state.arrChat, action.message] })
+    return Object.assign({}, state, { arrChat: [...action.message] })
+  },
+  [CREATE_GAME]: (state, action) => {
+    return Object.assign({}, state, { games: [...state.games, action.game] })
   }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = { news: [], arrChat: [] }
+const initialState = { news: [], arrChat: [], games: [] }
 export default function userReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state

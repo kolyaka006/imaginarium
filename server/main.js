@@ -36,10 +36,12 @@ app.use(require('webpack-hot-middleware')(compiler, {
 
 mongoose.connect('mongodb://nick:Ihn3drOUGpH55Mpy@imaginarium-shard-00-00-oauwz.mongodb.net:27017,' +
   'imaginarium-shard-00-01-oauwz.mongodb.net:27017,imaginarium-shard-00-02-oauwz.mongodb.net:27017' +
-  '/test?ssl=true&replicaSet=imaginarium-shard-0&authSource=admin')
+  '/imaginarium?ssl=true&replicaSet=imaginarium-shard-0&authSource=admin')
 
 require('./model/User')
 require('./model/Game')
+require('./model/Message')
+require('./model/Chat')
 const model = require('../server/model/DB')
 app.use(bodyParser.json())
 app.use(bodyParser({ uploadDir:'../public' }))
@@ -60,7 +62,7 @@ app.get('/api/login', (req, res) => {
     console.log('.....err1', err1, resp)
     if (resp) {
       if (resp.password === req.query.password) {
-        return res.send({ login: resp.login, name: resp.name })
+        return res.send({userId: resp._id, login: resp.login, name: resp.name })
       } else {
         return res.sendStatus(403)
       }
@@ -96,22 +98,9 @@ app.patch('/api/user/:id', (req, res) => {
     return res.json({ info: { name: req.body.info.name } })
   })
 })
-app.post('/api/news', (req, res) => {
-  let news = Object.assign({}, req.body.news, { user: req.body.id, created_at: new Date() })
-  let sendUser = (id) => {
-    model.News.findById(id).populate('user', 'avatar name').exec((err, news) => {
-      res.json(news)
-    })
-  }
-  model.News.create(news, (err, resp) => {
-    if (req.body.poster) {
-      news.poster = 'newsID' + resp._id + '.' + req.body.poster
-      resp.update({ poster: news.poster }, (err, upd) => {
-        sendUser(resp._id)
-      })
-    } else {
-      sendUser(resp._id)
-    }
+app.post('/api/game', (req, res) => {
+  model.Game.create({ users: [req.body.userId] }, (err, game) => {
+    res.send(game)
   })
 })
 

@@ -1,13 +1,21 @@
 exports = module.exports = (io) => {
+  const models = require('./model/DB')
   io.on('connection', (socket) => {
     console.log('.....socket', socket.rooms)
     socket.join('globalChat', () => {
-      socket.to('globalChat').emit('new user', { time: new Date().toTimeString().split(' ')[0],
-        message: 'Welcome to global chat!' })
-    })
-    socket.on('userLogin', (user) => {
-      // TODO: Does the server need to know the user?
-      socket.emit('sendUserId', socket.id)
+      socket.on('userLogin', (user) => {
+        // TODO: Does the server need to know the user?
+        models.Chat.findOne({ room: 'globalChat' }).populate('history').exec((err, chat) => {
+          console.log('.....chatchatchatchatchatchatchatchat', chat.history.length)
+          chat
+            ? socket.emit('historyChat', JSON.stringify(chat.history))
+            : models.Chat.create({ room: 'globalChat', history: [] }, (_chat) => {
+              socket.emit('historyChat', { time: new Date().toTimeString().split(' ')[0],
+                message: 'Welcome to global chat!' })
+            })
+        })
+        socket.emit('sendUserId', socket.id)
+      })
     })
 //    socket.on('leave channel', (channel) => {
 //      socket.leave(channel)
@@ -19,10 +27,24 @@ exports = module.exports = (io) => {
     })
     socket.on('newMessage', (msg) => {
       msg = JSON.parse(msg)
-      socket.emit('new message', { time: new Date().toTimeString().split(' ')[0],
-        message: msg.message })
-     console.log('.....test msgsssss', msg)
-    });
+      let sendMess = (mess) => {
+        console.log('.....send')
+        socket.emit('historyChat', mess)
+        socket.to('globalChat').emit('historyChat', mess)
+      }
+      models.Message.create({ userId: msg.userId, text: msg.message }, (err, message) => {
+        models.Chat.findOne({ room: msg.room }, (err, chat) => {
+          return chat
+            ? models.Chat.findByIdAndUpdate(chat._id, { $push: { history: message._id } }, { new: true })
+              .populate('history').exec((err, _chat) => {
+                sendMess(JSON.stringify(_chat.history))
+              })
+            : models.Chat.create({ room: msg.room, history: [message._id] }, (_chat) => {
+              sendMess([])
+            })
+        })
+      })
+    })
 //    socket.on('new channel', (channel) => {
 //      socket.broadcast.emit('new channel', channel)
 //    });
