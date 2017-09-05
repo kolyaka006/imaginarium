@@ -8,16 +8,23 @@ const socket = io('', { path: '/api/chat' })
 class HomeView extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { associated: '' }
+    this.state = { associated: '', message: '' }
+    console.log('.....test mess1')
+    socket.on('new message', mess => {
+      console.log('.....test mess2')
+      this.props.addMessInChat(mess)
+    })
   }
   componentDidMount () {
-    socket.emit('user login', (test) => {
-      console.log('.....test emit', test)
-    })
+    socket.emit('userLogin')
     socket.on('sendUserId', (userId) => {
       this.props.setUserId(userId)
-      console.log('.....test on', userId)
     })
+  }
+  sendMessage (text) {
+    let _text = '' + text
+    let obj = JSON.stringify({ chat: 'globalChat', message: _text })
+    socket.emit('newMessage', obj)
   }
 
   render () {
@@ -25,14 +32,13 @@ class HomeView extends React.Component {
       <div>
         <div className='home-top row' >
           <div className='avatar col-md-6 text-left' >
-            <div className='col-md-4 avatar-block text-center' >
-              { console.log('.....this.props.user', this.props.user) }
+            <div className='col-md-8 avatar-block text-center' >
               <div className='avatar-block__avatar-name col-md-12' >Name:
                 { this.props.user ? ' ' + this.props.user.name : '' }
               </div>
               <div className='col-md-12' >
                 <div className='avatar-block__avatar-name col-md-12' >socketID:
-                  { this.props.userId ? ' ' + this.props.user.userId : '' }
+                  { this.props.userId ? ' ' + this.props.userId : '' }
                 </div>
                 <div className='col-md-12' >
                   <Link to={'/'} onClick={() => { return this.props.logout() }} >
@@ -64,11 +70,13 @@ class HomeView extends React.Component {
         <div className='home-bottom' >
           <div className='chat' >
             <div className='chat__messages-block' >
+              {console.log('.....this.state', this.props)}
               <div className='chat__messages-block_messages' >
                 {
-                  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse().map((message) => {
-                    return (<div className='chat__message text-left' key={message}>
-                      {new Date().toTimeString().split(' ')[0]} message {message}
+                  this.props.arrChat.reverse().map((message, index) => {
+                    console.log('.....message, index', message, index)
+                    return (<div className='chat__message text-left' key={index}>
+                      {message.time} {message.message}
                     </div>)
                   })
                 }
@@ -77,9 +85,11 @@ class HomeView extends React.Component {
             <div className='chat__input-block row'>
               <div className='col-md-12'>
                 <div className='input-group'>
-                  <input type='text' className='form-control' />
+                  <input type='text' className='form-control' ref={mess => { this.state.message = mess }} />
                   <span className='input-group-btn'>
-                    <button className='btn btn-default' type='button'>Send</button>
+                    <button className='btn btn-default' type='button' onClick={() => {
+                      return this.sendMessage(this.state.message.value)
+                    }}>Send</button>
                   </span>
                 </div>
               </div>
@@ -95,7 +105,9 @@ HomeView.propTypes = {
   user: PropTypes.object,
   logout: PropTypes.func,
   userId: PropTypes.string,
-  setUserId: PropTypes.func
+  setUserId: PropTypes.func,
+  arrChat: PropTypes.array,
+  addMessInChat: PropTypes.func
 }
 
 export default HomeView

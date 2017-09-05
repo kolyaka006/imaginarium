@@ -34,9 +34,9 @@ app.use(require('webpack-hot-middleware')(compiler, {
   path: '/__webpack_hmr'
 }))
 
-mongoose.connect('mongodb://kolyaka:nanaki123@cluster0-shard-00-00-zr61a.mongodb.net:27017,' +
-  'cluster0-shard-00-01-zr61a.mongodb.net:27017,cluster0-shard-00-02-zr61a.mongodb.net:27017/' +
-  'testDB?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin')
+mongoose.connect('mongodb://nick:Ihn3drOUGpH55Mpy@imaginarium-shard-00-00-oauwz.mongodb.net:27017,' +
+  'imaginarium-shard-00-01-oauwz.mongodb.net:27017,imaginarium-shard-00-02-oauwz.mongodb.net:27017' +
+  '/test?ssl=true&replicaSet=imaginarium-shard-0&authSource=admin')
 
 require('./model/User')
 require('./model/Game')
@@ -56,17 +56,24 @@ app.use(express.static(path.resolve(project.basePath, 'public')))
 let usersArray = []
 let newsID = 0
 app.get('/api/login', (req, res) => {
-  model.User.findOne({ login: req.query.login, password: req.query.password }, (err1, resp) => {
-    return resp
-      ? res.send(resp)
-      : model.User.create({
+  model.User.findOne({ login: req.query.login }, (err1, resp) => {
+    console.log('.....err1', err1, resp)
+    if (resp) {
+      if (resp.password === req.query.password) {
+        return res.send({ login: resp.login, name: resp.name })
+      } else {
+        return res.sendStatus(403)
+      }
+    } else {
+      model.User.create({
         login: req.query.login,
         password: req.query.password,
         avatar: '',
-        name: req.query.login,
-        news: [] }, (err2, user) => {
+        name: req.query.login
+      }, (err2, user) => {
         return res.send(user)
       })
+    }
   })
 })
 app.get('/api/userInfo', (req, res) => {

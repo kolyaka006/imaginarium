@@ -1,12 +1,13 @@
 import { connect } from 'react-redux'
 import { getNews } from '../../../store/news'
-import { logout, setUserId } from '../../User/modules/user'
+import { logout, setUserId, addMessInChat } from '../../User/modules/user'
 import Home from '../components/HomeView'
 
 const mapDispatchToProps = {
   getNews,
   logout,
-  setUserId
+  setUserId,
+  addMessInChat
 }
 
 const mapStateToProps = (state) => {
@@ -14,7 +15,8 @@ const mapStateToProps = (state) => {
     user: state.user ? state.user.user : {},
     userId: state.user ? state.user.userId : {},
     load: state.user ? state.user.load : false,
-    isLogin: state.user ? state.user.isLogin : false
+    isLogin: state.user ? state.user.isLogin : false,
+    arrChat: state.user ? state.user.arrChat : []
   }
 }
 

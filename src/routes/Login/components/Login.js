@@ -2,13 +2,14 @@ import React from 'react'
 import { browserHistory } from 'react-router'
 import PropTypes from 'prop-types'
 
-let Login = ({ checkLogin, load = false, isLogin, user }) => {
+let Login = ({ checkLogin, load = false, isLogin, user, errorPass }) => {
   let login, password
   if (user.name) {
     browserHistory.push('/home')
   }
   return (
     <div className='row'>
+      {console.log('.....errorPass', errorPass)}
       <h2 className='header-font'> Login </h2>
       <div className='col-sm-6 col-sm-offset-3'>
         <form className='row login-form' onSubmit={(e) => {
@@ -39,9 +40,12 @@ let Login = ({ checkLogin, load = false, isLogin, user }) => {
           <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 30 }}>
             <input className='form-control inputLogin' placeholder='Login' ref={node => { login = node }} />
           </div>
-          <div className='col-sm-6 col-sm-offset-3' style={{ marginTop: 15 }}>
-            <input type='password' className='form-control inputPassword' placeholder='Password'
+          <div className={'col-sm-6 col-sm-offset-3'} style={{ marginTop: 15, position: 'relative' }}>
+            <input type='password' className={!errorPass
+              ? 'form-control inputPassword'
+              : 'form-control inputPassword error-input'} placeholder='Password'
               ref={node => { password = node }} />
+            { errorPass ? (<div className='error-password'>Неверный пароль</div>) : '' }
           </div>
           <button className={'btn btn-login btn-login col-sm-2 col-sm-offset-5 ' +
           'col-xs-6 col-xs-offset-3'} disabled={load}>
@@ -58,6 +62,7 @@ Login.propTypes = {
   load: PropTypes.bool,
   user: PropTypes.object,
   isLogin: PropTypes.bool,
+  errorPass: PropTypes.bool,
 }
 
 export default Login

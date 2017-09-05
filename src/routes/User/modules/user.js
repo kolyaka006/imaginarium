@@ -11,7 +11,8 @@ export const EDIT_USER_INFO = 'EDIT_USER_INFO'
 export const STATUS_EDIT = 'STATUS_EDIT'
 export const SEND_REQUEST = 'SEND_REQUEST'
 export const CHECK_LOGIN = 'CHECK_LOGIN'
-export const SET_USER_ID= 'SET_USER_ID'
+export const SET_USER_ID = 'SET_USER_ID'
+export const ADD_MESSAGE_IN_CHAT = 'ADD_MESSAGE_IN_CHAT'
 export const LOGOUT = 'LOGOUT'
 
 // ------------------------------------
@@ -100,13 +101,23 @@ export const checkLogin = (login, password) => {
       load: true,
     })
     fetch(`/api/login?login=${login}&password=${password}`)
-      .then(json => json.json())
+      .then(json => {
+        return json.status !== 403 ? json.json() : json
+      })
       .then(resp => {
-        dispatch({
+        console.log('.....resp', resp)
+        dispatch(resp.status !== 403 ? {
           type: CHECK_LOGIN,
           load: false,
           isLogin: true,
+          errorPass: false,
           user: resp
+        } : {
+          type: CHECK_LOGIN,
+          load: false,
+          isLogin: true,
+          errorPass: true,
+          user: {}
         })
       })
   }
@@ -156,9 +167,19 @@ export const logout = () => {
 }
 export const setUserId = (id) => {
   return (dispatch, getState) => {
+    console.log('.....setUserId', id)
     dispatch({
       type: SET_USER_ID,
       userId: id
+    })
+  }
+}
+export const addMessInChat = (data) => {
+  return (dispatch, getState) => {
+    console.log('.....test addMessInChat')
+    dispatch({
+      type: ADD_MESSAGE_IN_CHAT,
+      message: data
     })
   }
 }
@@ -171,7 +192,8 @@ export const actions = {
   editStatus,
   changeUserInfo,
   logout,
-  setUserId
+  setUserId,
+  addMessInChat
 }
 
 // ------------------------------------
@@ -197,7 +219,8 @@ const ACTION_HANDLERS = {
   [CHECK_LOGIN]: (state, action) => {
     return Object.assign({}, state, { user: action.user }, {
       isLogin: action.isLogin,
-      load: action.load
+      load: action.load,
+      errorPass: action.errorPass
     })
   },
   [EDIT_USER_INFO]: (state, action) => {
@@ -208,13 +231,16 @@ const ACTION_HANDLERS = {
   },
   [SET_USER_ID]: (state, action) => {
     return Object.assign({}, state, { userId: action.userId })
+  },
+  [ADD_MESSAGE_IN_CHAT]: (state, action) => {
+    return Object.assign({}, state, { arrChat: [...state.arrChat, action.message] })
   }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = { news: [], edit: false }
+const initialState = { news: [], arrChat: [] }
 export default function userReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state

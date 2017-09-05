@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user && state.user.user ? state.user.user : {},
     load: state.user ? state.user.load : false,
-    isLogin: state.user ? state.user.isLogin : false
+    isLogin: state.user ? state.user.isLogin : false,
+    errorPass: state.user ? state.user.errorPass : false
   }
 }
 
