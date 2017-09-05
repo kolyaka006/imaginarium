@@ -18,10 +18,10 @@ class HomeView extends React.Component {
       socket.on('historyChat', history => {
         console.log('.....test history', history)
         this.props.addMessInChat(JSON.parse(history))
+        let chatBlock = document.querySelector('.chat__messages-block')
+        chatBlock.scrollTop = chatBlock.scrollHeight
       })
     })
-  }
-  componentWillReceiveProps () {
   }
 
   render () {
@@ -72,7 +72,7 @@ class HomeView extends React.Component {
                 {
                   this.props.arrChat.map((message, index) => {
                     return (<div className='chat__message text-left' key={index}>
-                      <b>{new Date(message.created_at).toTimeString().split(' ')[0]}</b> {message.text}
+                      {message.name}(<b>{new Date(message.created_at).toTimeString().split(' ')[0]}</b>)<b>:</b> {message.text}
                     </div>)
                   })
                 }
@@ -83,6 +83,7 @@ class HomeView extends React.Component {
                 <form onSubmit={(e) => {
                   e.preventDefault()
                   let obj = JSON.stringify({ userId: this.props.user.userId,
+                    name: this.props.user.name,
                     room: 'globalChat',
                     message: this.state.message.value })
                   socket.emit('newMessage', obj)

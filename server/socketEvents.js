@@ -6,7 +6,6 @@ exports = module.exports = (io) => {
       socket.on('userLogin', (user) => {
         // TODO: Does the server need to know the user?
         models.Chat.findOne({ room: 'globalChat' }).populate('history').exec((err, chat) => {
-          console.log('.....chatchatchatchatchatchatchatchat', chat.history.length)
           chat
             ? socket.emit('historyChat', JSON.stringify(chat.history))
             : models.Chat.create({ room: 'globalChat', history: [] }, (_chat) => {
@@ -21,18 +20,16 @@ exports = module.exports = (io) => {
 //      socket.leave(channel)
 //    })
     socket.on('join channel', (channel) => {
-      console.log('.....channel', channel)
       socket.join(channel, () => {
       })
     })
     socket.on('newMessage', (msg) => {
       msg = JSON.parse(msg)
       let sendMess = (mess) => {
-        console.log('.....send')
         socket.emit('historyChat', mess)
         socket.to('globalChat').emit('historyChat', mess)
       }
-      models.Message.create({ userId: msg.userId, text: msg.message }, (err, message) => {
+      models.Message.create({ userId: msg.userId, name: msg.name, text: msg.message }, (err, message) => {
         models.Chat.findOne({ room: msg.room }, (err, chat) => {
           return chat
             ? models.Chat.findByIdAndUpdate(chat._id, { $push: { history: message._id } }, { new: true })

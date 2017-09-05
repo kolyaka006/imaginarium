@@ -10,7 +10,7 @@ const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const mongoose = require('mongoose')
 const SocketIo = require('socket.io')
-
+const BlockCard = require('../src/components/db.json')
 
 const app = express()
 app.use(compress())
@@ -57,6 +57,7 @@ app.use(express.static(path.resolve(project.basePath, 'public')))
 
 let usersArray = []
 let newsID = 0
+
 app.get('/api/login', (req, res) => {
   model.User.findOne({ login: req.query.login }, (err1, resp) => {
     console.log('.....err1', err1, resp)
@@ -85,6 +86,13 @@ app.get('/api/userInfo', (req, res) => {
     })
   })
 })
+
+app.post('/api/game', (req, res) => {
+  model.Game.create({ users: [req.body.userId], cards: BlockCard }, (err, game) => {
+    res.send(game)
+  })
+})
+
 app.get('/api/game/:id', (req, res) => {
   model.Game.findById(req.params.id).exec((err, resp) => {
     return res.status(200).json({ game: resp })
@@ -96,11 +104,6 @@ app.patch('/api/user/:id', (req, res) => {
       return res.statusCode(500)
     }
     return res.json({ info: { name: req.body.info.name } })
-  })
-})
-app.post('/api/game', (req, res) => {
-  model.Game.create({ users: [req.body.userId] }, (err, game) => {
-    res.send(game)
   })
 })
 
