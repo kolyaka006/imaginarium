@@ -6,7 +6,7 @@ let MessageSchema = mongoose.Schema({
   text: String,
   created_at: {
     type: Date,
-    default: new Date()
+    default: new Date().toISOString()
   }
 })
 

@@ -8,7 +8,7 @@ export const GET_NEWS = 'GET_NEWS'
 export const ADD_NEWS = 'ADD_NEWS'
 export const CHANGE_AVATAR = 'CHANGE_AVATAR'
 export const EDIT_USER_INFO = 'EDIT_USER_INFO'
-export const CREATE_GAME = 'CREATE_GAME'
+export const ADD_GAME = 'ADD_GAME'
 export const STATUS_EDIT = 'STATUS_EDIT'
 export const SEND_REQUEST = 'SEND_REQUEST'
 export const CHECK_LOGIN = 'CHECK_LOGIN'
@@ -149,28 +149,14 @@ export const changeUserInfo = (info, id) => {
   }
 }
 
-export const createGame = (id) => {
+export const addGame = (games) => {
   return (dispatch, getState) => {
+    console.log('.....gamesgamesgames', games)
     dispatch({
-      type: SEND_START,
-      load: true
+      type: ADD_GAME,
+      load: false,
+      game: games
     })
-    fetch(`/api/game`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({ userId: id })
-    }).then(json => json.json())
-      .then(resp => {
-        console.log('.....resp', resp)
-        dispatch({
-          type: CREATE_GAME,
-          load: false,
-          game: resp._id
-        })
-      })
   }
 }
 
@@ -220,7 +206,7 @@ export const actions = {
   logout,
   setUserId,
   addMessInChat,
-  createGame
+  addGame
 }
 
 // ------------------------------------
@@ -262,8 +248,9 @@ const ACTION_HANDLERS = {
   [ADD_MESSAGE_IN_CHAT]: (state, action) => {
     return Object.assign({}, state, { arrChat: [...action.message] })
   },
-  [CREATE_GAME]: (state, action) => {
-    return Object.assign({}, state, { games: [...state.games, action.game] })
+  [ADD_GAME]: (state, action) => {
+    console.log('.....ADD_GAME', state, action)
+    return Object.assign({}, state, { games: action.game })
   }
 }
 

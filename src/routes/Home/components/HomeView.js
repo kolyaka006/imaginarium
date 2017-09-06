@@ -9,17 +9,20 @@ class HomeView extends React.Component {
   constructor (props) {
     super(props)
     this.state = { associated: '', message: '' }
-    console.log('.....this.props.games', this.props.games)
   }
   componentDidMount () {
     socket.emit('userLogin')
     socket.on('sendUserId', (userId) => {
       this.props.setUserId(userId)
       socket.on('historyChat', history => {
-        console.log('.....test history', history)
+//        console.log('.....test history', history)
         this.props.addMessInChat(JSON.parse(history))
         let chatBlock = document.querySelector('.chat__messages-block')
         chatBlock.scrollTop = chatBlock.scrollHeight
+      })
+      socket.on('listGames', games => {
+        this.props.addGame(JSON.parse(games))
+        console.log('.....games', JSON.parse(games))
       })
     })
   }
@@ -35,11 +38,11 @@ class HomeView extends React.Component {
               </div>
               <div className='col-md-12' >
                 <div className='avatar-block__avatar-name col-md-12' >socketID:
-                  { this.props.userId ? ' ' + this.props.userId : '' }
+                  { this.props.userId ? ' ' + this.props.user.userId : '' }
                 </div>
                 <div className='col-md-12' >
                   <Link to={'/'} onClick={() => { return this.props.logout() }} >
-                    <button>Logout</button>
+                    <button className='btn btn-primary'>Logout</button>
                   </Link>
                 </div>
               </div>
@@ -50,15 +53,32 @@ class HomeView extends React.Component {
               <div className='games__header' >Current Game</div>
               <div className='games__list' >
                 { !this.props.games.length ? <div className='games__list_game' >No games created</div>
-                  : this.props.games.map((game) => {
-                    return (<Link to={`/game/${game}`} ><div className='games__list_game' >{game}</div></Link>)
-                  })}
+                    : this.props.games.map((game, index) => {
+                      return (
+                        <div className='games__list_game' key={index}>
+                          <Link to={`/game/${game._id}`} >
+                            <div className='games__name'>{game._id}</div>
+                          </Link>
+                          <div className='btn-join'>
+                            <button className={game.users.indexOf(this.props.user.userId) === -1
+                              ? 'btn btn-success'
+                              : 'btn btn-danger'} onClick={() => {
+                                return game.users.indexOf(this.props.user.userId) === -1
+                                    ? socket.emit('joinGame', JSON.stringify({
+                                      gameId: game._id,
+                                      userId: this.props.user.userId
+                                    }))
+                                    : false
+                              }}>JOIN ({game.users.length})</button>
+                          </div>
+                        </div>)
+                    })}
               </div>
               <div className='games__footer' >
                 <button className='games__button' onClick={() => {
-                  return this.props.createGame(this.props.user.userId)
+                  return socket.emit('createGame', this.props.user.userId)
                 }}>
-                  Create game
+                  Create Lobby
                 </button>
               </div>
             </div>
@@ -68,18 +88,19 @@ class HomeView extends React.Component {
           <div className='chat' >
             <div className='chat__messages-block' >
               <div className='chat__messages-block_messages' ref={(chatBlock) => { this.chatBlock = chatBlock }} >
-                { console.log('.....this.props.arrChat', this.props.arrChat) }
+                {/*{ console.log('.....this.props.arrChat', this.props.arrChat) }*/}
                 {
                   this.props.arrChat.map((message, index) => {
                     return (<div className='chat__message text-left' key={index}>
-                      {message.name}(<b>{new Date(message.created_at).toTimeString().split(' ')[0]}</b>)<b>:</b> {message.text}
+                      {message.name}(<b>{new Date(message.created_at).toTimeString().split(' ')[0]}</b>)<b>:</b>
+                      {message.text}
                     </div>)
                   })
                 }
               </div>
             </div>
             <div className='chat__input-block row'>
-              <div className='col-md-12'>
+              <div className='col-md-offset-3 col-md-6'>
                 <form onSubmit={(e) => {
                   e.preventDefault()
                   let obj = JSON.stringify({ userId: this.props.user.userId,
@@ -113,7 +134,7 @@ HomeView.propTypes = {
   arrChat: PropTypes.array,
   games: PropTypes.array,
   addMessInChat: PropTypes.func,
-  createGame: PropTypes.func
+  addGame: PropTypes.func
 }
 
 export default HomeView

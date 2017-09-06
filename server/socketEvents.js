@@ -1,5 +1,6 @@
 exports = module.exports = (io) => {
   const models = require('./model/DB')
+  const BlockCard = require('../src/components/db.json')
   io.on('connection', (socket) => {
     console.log('.....socket', socket.rooms)
     socket.join('globalChat', () => {
@@ -12,6 +13,9 @@ exports = module.exports = (io) => {
               socket.emit('historyChat', { time: new Date().toTimeString().split(' ')[0],
                 message: 'Welcome to global chat!' })
             })
+        })
+        models.Game.find({}, (err, games) => {
+          socket.emit('listGames', JSON.stringify(games))
         })
         socket.emit('sendUserId', socket.id)
       })
@@ -29,22 +33,37 @@ exports = module.exports = (io) => {
         socket.emit('historyChat', mess)
         socket.to('globalChat').emit('historyChat', mess)
       }
-      models.Message.create({ userId: msg.userId, name: msg.name, text: msg.message }, (err, message) => {
-        models.Chat.findOne({ room: msg.room }, (err, chat) => {
-          return chat
-            ? models.Chat.findByIdAndUpdate(chat._id, { $push: { history: message._id } }, { new: true })
-              .populate('history').exec((err, _chat) => {
-                sendMess(JSON.stringify(_chat.history))
+      models.Message.create({ userId: msg.userId, name: msg.name, text: msg.message, created_at: new Date() },
+        (err, message) => {
+          models.Chat.findOne({ room: msg.room }, (err, chat) => {
+            return chat
+              ? models.Chat.findByIdAndUpdate(chat._id, { $push: { history: message._id } }, { new: true })
+                .populate('history').exec((err, _chat) => {
+                  sendMess(JSON.stringify(_chat.history))
+                })
+              : models.Chat.create({ room: msg.room, history: [message._id] }, (_chat) => {
+                sendMess([])
               })
-            : models.Chat.create({ room: msg.room, history: [message._id] }, (_chat) => {
-              sendMess([])
-            })
+          })
+        })
+    })
+    socket.on('createGame', (id) => {
+      models.Game.create({ users: [id], cards: BlockCard }, (err, res) => {
+        models.Game.find({}, (err, games) => {
+          socket.emit('listGames', JSON.stringify(games))
+          socket.broadcast.emit('listGames', JSON.stringify(games))
         })
       })
     })
-//    socket.on('new channel', (channel) => {
-//      socket.broadcast.emit('new channel', channel)
-//    });
+    socket.on('joinGame', (ids) => {
+      ids = JSON.parse(ids)
+      models.Game.findByIdAndUpdate(ids.gameId, { $push: { users: ids.userId } }, (err, res) => {
+        models.Game.find({}, (err, games) => {
+          socket.emit('listGames', JSON.stringify(games))
+          socket.broadcast.emit('listGames', JSON.stringify(games))
+        })
+      })
+    })
 //    socket.on('typing', (data) => {
 //      socket.broadcast.to(data.channel).emit('typing bc', data.user);
 //    });

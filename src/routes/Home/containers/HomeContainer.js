@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { getNews } from '../../../store/news'
-import { logout, setUserId, addMessInChat, createGame } from '../../User/modules/user'
+import { logout, setUserId, addMessInChat, addGame } from '../../User/modules/user'
 import Home from '../components/HomeView'
 
 const mapDispatchToProps = {
@@ -8,7 +8,7 @@ const mapDispatchToProps = {
   logout,
   setUserId,
   addMessInChat,
-  createGame
+  addGame
 }
 
 const mapStateToProps = (state) => {

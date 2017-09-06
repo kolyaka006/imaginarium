@@ -43,7 +43,7 @@
 }
 
 .chat {
-  width: 50%;
+  width: 90%;
   margin: auto;
   height: auto;
   min-height: 32rem;
@@ -57,7 +57,7 @@
   position: absolute;
   bottom: 15px;
   margin: auto;
-  width: 49%;
+  width: 88%;
 }
 
 .chat__messages-block {
@@ -73,8 +73,29 @@
   padding: 0.4rem 0;
 }
 
+.games__list {
+  overflow: auto;
+  max-height: 46vh;
+}
+
 .games__list_game {
   padding: 0.5rem;
   border-bottom: 1px solid #ccc;
   cursor: pointer;
+  display: table;
+  width: 100%;
+}
+
+.games__list_game div, .games__list_game a {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.games__name {
+  width: 70%;
+  float: left;
+}
+
+.btn-join {
+  width: 30%;
 }
